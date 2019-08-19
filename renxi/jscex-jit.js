@@ -1,17 +1,17 @@
 (function () {
-    
+
     var codeGenerator = (typeof eval("(function () {})") == "function") ?
         function (code) { return code; } :
         function (code) { return "false || " + code; };
-        
+
     // support string type only.
     var stringify = (typeof JSON !== "undefined" && JSON.stringify) ?
         function (s) { return JSON.stringify(s); } :
         (function () {
             // Implementation comes from JSON2 (http://www.json.org/js.html)
-        
+
             var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-            
+
             var meta = {    // table of character substitutions
                 '\b': '\\b',
                 '\t': '\\t',
@@ -21,7 +21,7 @@
                 '"' : '\\"',
                 '\\': '\\\\'
             }
-            
+
             return function (s) {
                 // If the string contains no control characters, no quote characters, and no
                 // backslash characters, then we can safely slap some quotes around it.
@@ -36,18 +36,18 @@
                 }) + '"' : '"' + s + '"';
             };
         })();
-    
+
     // seed defined in global
     if (typeof __jscex__tempVarSeed === "undefined") {
         __jscex__tempVarSeed = 0;
     }
 
     var init = function (root) {
-    
+
         if (root.modules["jit"]) {
             return;
         }
-    
+
         function JscexTreeGenerator(binder) {
             this._binder = binder;
             this._root = null;
@@ -106,7 +106,7 @@
                                     expression: expr[2][0],
                                     argName: name,
                                     assignee: null
-                                };                            
+                                };
                             }
                         }
                     }
@@ -257,7 +257,7 @@
                     }
 
                     var delayStmt = { type: "delay", stmts: [] };
-            
+
                     var setup = ast[1];
                     if (setup) {
                         delayStmt.stmts.push({ type: "raw", stmt: setup });
@@ -265,12 +265,12 @@
 
                     var loopStmt = { type: "loop", bodyFirst: false, bodyStmt: { type: "delay", stmts: bodyStmts } };
                     delayStmt.stmts.push(loopStmt);
-                    
+
                     var condition = ast[2];
                     if (condition) {
                         loopStmt.condition = condition;
                     }
-                    
+
                     var update = ast[3];
                     if (update) {
                         loopStmt.update = update;
@@ -282,14 +282,14 @@
                 "for-in": function (ast) {
 
                     var body = ast[4];
-                    
+
                     var bodyStmts = [];
                     this._visitBody(body, bodyStmts);
 
                     if (this._noBinding(bodyStmts)) {
                         return { type: "raw", stmt: ast };
                     }
-                
+
                     var id = (__jscex__tempVarSeed++);
                     var keysVar = "$$_keys_$$_" + id;
                     var indexVar = "$$_index_$$_" + id;
@@ -308,13 +308,13 @@
                         type: "raw",
                         stmt: uglifyJS.parse("var " + membersVar + " = [];")[1][0]
                     });
-                    
+
                     // for (var mem in obj) members.push(mem);
                     var keysAst = uglifyJS.parse("for (var " + memVar +" in obj) " + membersVar + ".push(" + memVar + ");")[1][0];
                     keysAst[3] = ast[3]; // replace the "obj" with real AST.
                     delayStmt.stmts.push({ type : "raw", stmt: keysAst});
                     */
-                    
+
                     // var index = 0;
                     delayStmt.stmts.push({
                         type: "raw",
@@ -396,7 +396,7 @@
                     var switchStmt = { type: "switch", item: ast[1], caseStmts: [] };
 
                     var cases = ast[2];
-                    for (var i = 0; i < cases.length; i++) {                    
+                    for (var i = 0; i < cases.length; i++) {
                         var caseStmt = { item: cases[i][0], stmts: [] };
                         switchStmt.caseStmts.push(caseStmt);
 
@@ -436,13 +436,13 @@
                             break;
                         }
                     }
-        
+
                     var elsePart = currAst[3];
                     if (elsePart) {
                         ifStmt.elseStmts = [];
 
                         this._visitBody(elsePart, ifStmt.elseStmts);
-                        
+
                         noBinding = noBinding && this._noBinding(ifStmt.elseStmts);
                     }
 
@@ -462,7 +462,7 @@
                     var noBinding = this._noBinding(bodyStmts)
 
                     var tryStmt = { type: "try", bodyStmt: { type: "delay", stmts: bodyStmts } };
-                    
+
                     var catchClause = ast[2];
                     if (catchClause) {
                         var exVar = catchClause[0];
@@ -627,7 +627,7 @@
                 var funcName = ast[1] || "";
                 var args = ast[2];
                 var statements = ast[3];
-                
+
                 this._writeLine("function " + funcName + "(" + args.join(", ") + ") {")
                 this._indentLevel++;
 
@@ -764,7 +764,7 @@
 
                     for (var i = 0; i < ast.conditionStmts.length; i++) {
                         var stmt = ast.conditionStmts[i];
-                        
+
                         this._write("if (")._visitRaw(stmt.cond)._writeLine(") {");
                         this._indentLevel++;
 
@@ -891,7 +891,7 @@
                 "seq": function (ast) {
                     for (var i = 1; i < ast.length; i++) {
                         this._visitRaw(ast[i]);
-                        if (i < ast.length - 1) this._write(", "); 
+                        if (i < ast.length - 1) this._write(", ");
                     }
                 },
 
@@ -995,7 +995,7 @@
                 },
 
                 "call": function (ast) {
-                
+
                     if (_isJscexPattern(ast)) {
                         var indent = this._indent + this._indentLevel * 4;
                         var newCode = _compileJscexPattern(ast, indent);
@@ -1035,19 +1035,19 @@
                     } else {
                         this._writeLine("{");
                         this._indentLevel++;
-                        
+
                         for (var i = 0; i < items.length; i++) {
                             this._writeIndents()
                                 ._write(stringify(items[i][0]) + ": ")
                                 ._visitRaw(items[i][1]);
-                            
+
                             if (i < items.length - 1) {
                                 this._writeLine(",");
                             } else {
                                 this._writeLine("");
                             }
                         }
-                        
+
                         this._indentLevel--;
                         this._writeIndents()._write("}");
                     }
@@ -1095,7 +1095,7 @@
                         this._write("return ")._visitJscex({ type: "return", stmt: ast })._write(";");
                     }
                 },
-                
+
                 "for": function (ast) {
                     this._write("for (");
 
@@ -1137,7 +1137,7 @@
                     } else {
                         this._visitRaw(declare);
                     }
-                    
+
                     this._write(" in ")._visitRaw(ast[3])._write(") ");
 
                     var body = ast[4];
@@ -1271,7 +1271,7 @@
 
                         this._visitRawStatements(finallyStatements);
                         this._indentLevel--;
-                    }                
+                    }
 
                     this._writeIndents()
                         ._write("}");
@@ -1311,7 +1311,7 @@
 
         function _isJscexPattern(ast) {
             if (ast[0] != "call") return false;
-            
+
             var evalName = ast[1];
             if (evalName[0] != "name" || evalName[1] != "eval") return false;
 
@@ -1332,7 +1332,7 @@
 
             return true;
         }
-        
+
         function _compileJscexPattern(ast, indent) {
 
             var builderName = ast[2][0][2][0][1];
@@ -1347,7 +1347,7 @@
 
             return newCode;
         }
-        
+
         function compile(builderName, func) {
 
             var funcCode = func.toString();
@@ -1359,34 +1359,34 @@
             var newCode = _compileJscexPattern(evalAst, 0);
 
             root.logger.debug(funcCode + "\n\n>>>\n\n" + newCode);
-            
+
             return codeGenerator(newCode);
         };
 
         root.compile = compile;
-        
+
         root.modules["jit"] = true;
     }
-    
+
     var isCommonJS = (typeof require !== "undefined" && typeof module !== "undefined" && module.exports);
     var isAmd = (typeof define !== "undefined" && define.amd);
-    
+
     if (isCommonJS) {
         module.exports.init = function (root) {
             if (!root.modules["parser"]) {
                 require("./jscex-parser").init(root);
             };
-            
+
             init(root);
         }
     } else if (isAmd) {
-        define("jscex-jit", ["jscex-parser"], function (parser) {
+        define("jscex-jit", ["renxi/jscex-parser"], function (parser) {
             return {
                 init: function (root) {
                     if (!root.modules["parser"]) {
                         parser.init(root);
                     }
-                    
+
                     init(root);
                 }
             };
@@ -1395,7 +1395,7 @@
         if (typeof Jscex === "undefined") {
             throw new Error('Missing root object, please load "jscex" module first.');
         }
-        
+
         if (!Jscex.modules["parser"]) {
             throw new Error('Missing essential components, please initialize "parser" module first.');
         }
