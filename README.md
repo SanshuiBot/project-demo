@@ -1,12 +1,103 @@
-# demoProject
+# demoProject —— 前端趣味实验室
 
-一个纯前端趣味 demo 合集，全部为**零依赖静态页面**（仅本地资源，无需构建、无需后端），克隆后可直接在浏览器打开，或部署到任意静态托管（GitHub Pages 等）。
+一个纯前端趣味 demo 合集：**爱心树表白 / 纯 CSS3 小黄人 / 3D 元素周期表**。
 
-| Demo | 说明 | 在线预览 |
+仓库根目录自带一个**玻璃拟态导航首页**（`index.html`），卡片式入口直达三个作品。
+整个仓库刻意保持**零依赖纯静态**——无 npm、无构建步骤、无后端、无 CDN，克隆后双击即可打开，部署到 GitHub Pages 等任意静态托管即开即用。
+
+## 作品一览
+
+| 入口 | Demo | 说明 | 在线预览 |
+| --- | --- | --- | --- |
+| 首页 | 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [立即打开](https://SanshuiBot.github.io/project-demo/) |
+| confession | 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [立即打开](https://SanshuiBot.github.io/project-demo/confession/index.html) |
+| minions | 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [立即打开](https://SanshuiBot.github.io/project-demo/minions/minions_animation.html) |
+| 3DPeriodicTable | 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [立即打开](https://SanshuiBot.github.io/project-demo/3DPeriodicTable/index.html) |
+
+## 项目特性
+
+- 🧱 **零依赖纯静态**：全部为本地资源，无任何外网请求；克隆后直接双击 `index.html` 即可运行；
+- 🏠 **自带导航首页**：根目录 `index.html` 汇总三件作品，深色玻璃拟态 + 主题配色，移动端自适应；
+- 🎨 **主题丰富**：Canvas 动画、纯 CSS3 造型、three.js CSS3D 各占一席，风格互不重复；
+- ♿ **细节考究**：`prefers-reduced-motion` 减弱动态效果支持、窄屏适配、性能优化（后台自动暂停渲染等）。
+
+## 快速开始
+
+三个 demo 与首页均为纯静态页面，任选其一：
+
+```bash
+# 方式一：直接双击仓库根目录的 index.html（会打开导航首页，可点进各 demo）
+# 方式二：本地起一个静态服务（推荐，可完整体验音频等资源加载）
+cd project-demo
+python -m http.server 8080
+# 浏览器访问 http://localhost:8080/            → 导航首页
+#                 http://localhost:8080/confession/ 等 → 各 demo
+```
+
+> 提示：`minions` 的入口文件名为 `minions_animation.html`，其余两个 demo 均为 `index.html`；
+> 首页里的跳转全部使用相对路径，无论双击打开还是部署到子路径（如 `/project-demo/`）都能正确工作。
+
+## 部署到 GitHub Pages
+
+本仓库**没有构建步骤**，源码即产物，因此最简单可靠的方式是**从分支部署**（Deploy from a branch），无需任何 CI 配置。
+
+### 方式 A：分支部署（推荐）
+
+1. 推送代码到 GitHub 仓库（如 `SanshuiBot/project-demo`）；
+2. 打开仓库 **Settings → Pages**；
+3. 在 **Build and deployment** 区域，把 **Source** 选为 **"Deploy from a branch"**；
+4. **Branch** 选择 `main`，目录选 **`/`（root）**，点击 **Save**；
+5. 等待约 1 分钟（Actions 会自动跑一次），即可访问：
+   `https://SanshuiBot.github.io/project-demo/`
+
+访问路径与仓库名一致，均为相对路径友好设计：
+
+| 页面 | 地址 |
+| --- | --- |
+| 导航首页 | `https://<user>.github.io/project-demo/` |
+| 爱心树表白 | `https://<user>.github.io/project-demo/confession/` |
+| 小黄人 | `https://<user>.github.io/project-demo/minions/minions_animation.html` |
+| 3D 周期表 | `https://<user>.github.io/project-demo/3DPeriodicTable/` |
+
+> 如果仓库是私有的，请先在 **Settings → Pages** 开启 Pages 服务（免费版需公开仓库）；
+> 之后每次 push 到 `main`，GitHub 都会自动重新部署，无需手动操作。
+
+### 方式 B：GitHub Actions 部署（可选）
+
+若将来引入需要构建的框架（Vite 等），再把 Pages 的 Source 切到 **"GitHub Actions"**，
+并在仓库新增 `.github/workflows/deploy.yml` 即可——构建全部在云端完成，本地依然只需 push：
+
+```yaml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4
+```
+
+两种方式的对比：
+
+| 维度 | 分支部署 | GitHub Actions |
 | --- | --- | --- |
-| confession | 爱心树表白 · 程序员的浪漫（Canvas 动画 + 打字机情书） | [立即打开](https://SanshuiBot.github.io/project-demo/confession/index.html) |
-| minions | 纯 CSS3 小黄人 · 动画雕塑 | [立即打开](https://SanshuiBot.github.io/project-demo/minions/minions_animation.html) |
-| 3DPeriodicTable | 3D 元素周期表 · three.js CSS3D | [立即打开](https://SanshuiBot.github.io/project-demo/3DPeriodicTable/index.html) |
+| 适用场景 | 纯静态、无构建 | 需要构建步骤 / 自定义流程 |
+| 配置成本 | Settings 里点两下 | 需写 workflow 文件 |
+| 部署历史 | 覆盖式 | 每次部署留痕、可回滚 |
+
+**当前建议**：项目是纯静态零依赖，直接用**方式 A** 即可；哪天引入打包构建再切方式 B，并把 `path: .` 改成 `dist` 等构建产物目录。
 
 ---
 
@@ -109,26 +200,31 @@ minions/
     └── CSS3DRenderer.js     # CSS3D 渲染器（本地依赖）
 ```
 
+> 说明：`3DPeriodicTable/js/` 下的 `three.min.js` 等为**本地第三方库文件**，随仓库分发而非 CDN 引用，
+> 因此部署后依然没有任何外网请求，属于仓库内唯一的“依赖”，请勿删除。
+
 ---
 
-## 本地运行
+## 开发与维护约定
 
-三个项目均为纯静态页面，任选其一：
+- **保持零依赖**：仓库刻意不引入 npm / 构建工具 / 工具链。曾引入的 ESLint + Prettier 已移除——
+  对纯静态页面价值有限，反而增加 `node_modules` 体积与克隆负担。改动代码后无需 `npm install` / `lint`，刷新浏览器即可验证；
+- **代码风格**：沿用各文件现有缩进（2 空格）与注释密度；新代码保持无外部请求、可离线运行；
+- **LESS**：仅 `minions/main.less` 涉及编译，改完用 `lessc` 重新生成 `main.css`（详见小黄人章节）；
+- **提交信息**：遵循 Conventional Commits（如 `feat:` / `fix:` / `chore:`）。
 
-```bash
-# 方式一：直接双击项目目录下的 index.html / minions_animation.html
-# 方式二：本地起一个静态服务（推荐，可完整体验音频等资源加载）
-cd project-demo
-python -m http.server 8080
-# 浏览器访问 http://localhost:8080/confession/ 等
-```
+## 近期更新
+
+- 🏠 新增根目录导航首页 `index.html`（玻璃拟态卡片 + 主题配色 + 移动端适配），README 同步补充部署说明；
+- 🧹 移除 ESLint / Prettier / `package.json` 等 npm 工具链，回归纯静态零依赖。
 
 ## 目录一览
 
 ```
 project-demo/
-├── README.md
+├── README.md             # 项目文档（即本文件）
+├── index.html            # 导航首页（深色玻璃拟态卡片，链接到下方三个 demo）
 ├── confession/           # 爱心树表白（Canvas + async/await，无第三方库）
 ├── minions/              # 纯 CSS3 小黄人（LESS + CSS3 动画）
-└── 3DPeriodicTable/      # 3D 元素周期表（three.js CSS3D）
+└── 3DPeriodicTable/      # 3D 元素周期表（three.js CSS3D，本地库文件）
 ```

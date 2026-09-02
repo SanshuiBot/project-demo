@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="前端趣味 Demo 合集导航页：爱心树表白、纯 CSS3 小黄人、3D 元素周期表，零依赖纯静态，开箱即用。"
+    />
+    <title>前端趣味实验室 · 三个零依赖 Demo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>"
+    />
+    <style>
+      :root {
+        --bg: #0b0e1a;
+        --text: #e8ecf7;
+        --muted: #98a2bf;
+        --line: rgba(255, 255, 255, 0.09);
+        --glass: rgba(255, 255, 255, 0.045);
+        --accent: #a78bfa;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui,
+          -apple-system, sans-serif;
+        color: var(--text);
+        background: radial-gradient(1200px 800px at 15% -10%, #1b2340 0%, transparent 60%),
+          radial-gradient(1000px 700px at 110% 20%, #221b3d 0%, transparent 55%),
+          radial-gradient(900px 900px at 50% 120%, #101a33 0%, transparent 60%),
+          var(--bg);
+        overflow-x: hidden;
+      }
+
+      /* ===== 背景漂浮光斑 ===== */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .bg span {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.5;
+        will-change: transform;
+        animation: drift 22s ease-in-out infinite alternate;
+      }
+
+      .bg span:nth-child(1) {
+        width: 420px;
+        height: 420px;
+        left: -120px;
+        top: -120px;
+        background: #7c3aed;
+        opacity: 0.28;
+      }
+
+      .bg span:nth-child(2) {
+        width: 380px;
+        height: 380px;
+        right: -100px;
+        top: 15%;
+        background: #ec4899;
+        opacity: 0.2;
+        animation-delay: -7s;
+        animation-duration: 26s;
+      }
+
+      .bg span:nth-child(3) {
+        width: 460px;
+        height: 460px;
+        left: 30%;
+        bottom: -220px;
+        background: #06b6d4;
+        opacity: 0.16;
+        animation-delay: -14s;
+        animation-duration: 30s;
+      }
+
+      @keyframes drift {
+        from {
+          transform: translate(0, 0) scale(1);
+        }
+        to {
+          transform: translate(60px, -40px) scale(1.15);
+        }
+      }
+
+      /* ===== 主容器 ===== */
+      main {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 72px 24px 48px;
+      }
+
+      /* ===== 头部 ===== */
+      .hero {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 16px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--glass);
+        backdrop-filter: blur(8px);
+        color: var(--muted);
+        font-size: 13px;
+        letter-spacing: 0.5px;
+      }
+
+      .hero h1 {
+        margin: 22px 0 14px;
+        font-size: clamp(34px, 6vw, 52px);
+        font-weight: 800;
+        letter-spacing: 1px;
+        background: linear-gradient(92deg, #67e8f9, #a78bfa 45%, #f472b6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .sub {
+        max-width: 620px;
+        margin: 0 auto;
+        color: var(--muted);
+        line-height: 1.9;
+        font-size: 15px;
+      }
+
+      /* ===== 卡片网格 ===== */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 26px;
+      }
+
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0 0 26px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+        text-decoration: none;
+        color: var(--text);
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.35s, box-shadow 0.35s;
+        /* 每个卡片用 --a1/--a2/--a3 定义专属配色（渐变 + 发光色） */
+      }
+
+      .card:hover,
+      .card:focus-visible {
+        transform: translateY(-8px);
+        border-color: var(--a1);
+        box-shadow: 0 24px 60px -18px var(--a3);
+        outline: none;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, var(--a1), var(--a2));
+        opacity: 0.9;
+      }
+
+      /* 卡片顶部缩略条 */
+      .thumb {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 128px;
+        margin-bottom: 20px;
+        background:
+          radial-gradient(120% 160% at 50% 0%, var(--a1) 0%, transparent 55%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+      }
+
+      .thumb::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--a2), transparent);
+        opacity: 0.5;
+      }
+
+      .thumb .emoji {
+        font-size: 58px;
+        filter: drop-shadow(0 10px 24px var(--a3));
+        transform: translateY(0);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .card:hover .thumb .emoji {
+        transform: translateY(-6px) scale(1.1) rotate(-6deg);
+      }
+
+      .body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 0 24px;
+      }
+
+      .body h2 {
+        font-size: 21px;
+        font-weight: 700;
+      }
+
+      .tagline {
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--a1);
+        font-weight: 600;
+        letter-spacing: 0.4px;
+      }
+
+      .desc {
+        margin-top: 12px;
+        font-size: 14px;
+        line-height: 1.8;
+        color: var(--muted);
+        flex: 1;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+        list-style: none;
+      }
+
+      .chips li {
+        padding: 4px 11px;
+        font-size: 12px;
+        border-radius: 999px;
+        color: var(--a1);
+        border: 1px solid var(--a1);
+        background: color-mix(in srgb, var(--a1) 10%, transparent);
+      }
+
+      .go {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 22px 0 0;
+        padding: 11px 18px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.06);
+        transition: background 0.3s, border-color 0.3s, color 0.3s;
+      }
+
+      .go .arrow {
+        transition: transform 0.3s;
+      }
+
+      .card:hover .go {
+        background: linear-gradient(92deg, var(--a1), var(--a2));
+        border-color: transparent;
+        color: #0b0e1a;
+      }
+
+      .card:hover .go .arrow {
+        transform: translateX(4px);
+      }
+
+      /* 三个卡片的专属配色 */
+      .card-love {
+        --a1: #ff8fb3;
+        --a2: #ff4d8d;
+        --a3: rgba(255, 77, 141, 0.5);
+      }
+
+      .card-minion {
+        --a1: #ffd94d;
+        --a2: #ffab1f;
+        --a3: rgba(255, 203, 40, 0.42);
+      }
+
+      .card-table {
+        --a1: #4fd8f2;
+        --a2: #6366f1;
+        --a3: rgba(99, 102, 241, 0.5);
+      }
+
+      /* ===== 页脚 ===== */
+      footer {
+        margin-top: 64px;
+        padding-top: 24px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 2;
+        border-top: 1px solid var(--line);
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* ===== 响应式 / 减弱动态效果 ===== */
+      @media (max-width: 640px) {
+        main {
+          padding-top: 48px;
+        }
+        .hero {
+          margin-bottom: 40px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .bg span,
+        .thumb .emoji {
+          animation: none !important;
+        }
+        .card {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+
+    <main>
+      <header class="hero">
+        <p class="badge">✨ 零依赖 · 纯静态 · 开箱即用</p>
+        <h1>前端趣味实验室</h1>
+        <p class="sub">
+          一个仓库，三种浪漫：一颗长成满树繁花的爱心，一支会眨眼的小黄人军团，
+          一座可以捧在手心里的 3D 周期表。
+        </p>
+      </header>
+
+      <section class="grid">
+        <a class="card card-love" href="confession/index.html">
+          <div class="thumb"><span class="emoji">❤️</span></div>
+          <div class="body">
+            <h2>爱心树表白</h2>
+            <p class="tagline">程序员的情书</p>
+            <p class="desc">
+              点击心形种子，看它坠落入土、长成参天大树、开出满树繁花；打字机逐字敲出情话，
+              倒计时默默记录「在一起」的每一天。
+            </p>
+            <ul class="chips">
+              <li>Canvas 动画</li>
+              <li>打字机情书</li>
+              <li>零依赖</li>
+            </ul>
+            <span class="go">立即体验 <span class="arrow">→</span></span>
+          </div>
+        </a>
+
+        <a class="card card-minion" href="minions/minions_animation.html">
+          <div class="thumb"><span class="emoji">💛</span></div>
+          <div class="body">
+            <h2>纯 CSS3 小黄人</h2>
+            <p class="tagline">动画雕塑 · Minions</p>
+            <p class="desc">
+              不用任何图片与脚本，仅用 DIV + CSS3 就画出会眨眼、嘴巴张合的小黄人军团，
+              四种体型一次集齐。
+            </p>
+            <ul class="chips">
+              <li>纯 CSS3 造型</li>
+              <li>关键帧动画</li>
+              <li>LESS 混入</li>
+            </ul>
+            <span class="go">立即体验 <span class="arrow">→</span></span>
+          </div>
+        </a>
+
+        <a class="card card-table" href="3DPeriodicTable/index.html">
+          <div class="thumb"><span class="emoji">⚛️</span></div>
+          <div class="body">
+            <h2>3D 元素周期表</h2>
+            <p class="tagline">three.js CSS3D</p>
+            <p class="desc">
+              118 个化学元素化作 3D 卡片，表格 / 球面 / 双螺旋 / 网格四种布局随意切换，
+              拖拽旋转、滚轮缩放，身临其境「玩」周期表。
+            </p>
+            <ul class="chips">
+              <li>three.js CSS3D</li>
+              <li>布局切换</li>
+              <li>补间动画</li>
+            </ul>
+            <span class="go">立即体验 <span class="arrow">→</span></span>
+          </div>
+        </a>
+      </section>
+
+      <footer>
+        <p>
+          纯前端趣味 Demo 合集 · 托管于 GitHub Pages ｜
+          <a href="https://github.com/SanshuiBot/project-demo" target="_blank" rel="noopener"
+            >项目仓库</a
+          >
+        </p>
+        <p>Made with ❤️ 💛 ⚛️ — 每一条链接都指向一段小心思</p>
+      </footer>
+    </main>
+  </body>
+</html>
