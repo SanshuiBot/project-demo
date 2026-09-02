@@ -1,0 +1,9 @@
+# 格式化排除：第三方 / 压缩 / 编译产物 / 文档与生成文件
+node_modules/
+**/*.min.js
+3DPeriodicTable/js/TrackballControls.js
+3DPeriodicTable/js/CSS3DRenderer.js
+minions/main.css
+package-lock.json
+README.md
+.verify/

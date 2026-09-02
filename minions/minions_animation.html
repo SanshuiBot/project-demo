@@ -1,234 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>小黄人构造器</title>
-		<link rel="stylesheet" href="main.css" />
-	</head>
-	<body>
-		<div class="minion-1">
-			<div class="hairs">
-				<div class="hair1"></div>
-				<div class="hair2"></div>
-				<div class="hair3"></div>
-			</div>
-			<div class="body">
-				<div class="cloth"></div>
-				<div class="straps left-straps">
-					<div class="fastener"></div>
-				</div>
-				<div class="straps right-straps">
-					<div class="fastener"></div>
-				</div>
-			</div>
-			<div class="glasses-type"></div>
-			<div class="glasses left-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="glasses right-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="mouth">
-				<div class="tooths">
-					<div class="line"></div>
-					<div class="tooth1"></div>
-					<div class="tooth2"></div>
-					<div class="tooth3"></div>
-				</div>
-			</div>
-			<div class="arm left-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="arm right-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="pocket">
-				<div>
-					<div></div>
-				</div>
-			</div>
-			<div class="trousers"></div>
-			<div class="leg left-leg">
-				<div class="footer"></div>
-			</div>
-			<div class="leg right-leg">
-				<div class="footer"></div>
-			</div>
-		</div>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="纯 CSS3 绘制的小黄人动画集合，无任何图片与脚本" />
+    <title>纯 CSS3 小黄人 · Minions</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <!--
+  舞台：小黄人以绝对定位排成一排。
+  四个实例结构完全相同，仅通过 .minion-1 ~ .minion-4 上的 CSS 区分大小与单/双眼：
+    .minion-1  标准尺寸 · 双眼
+    .minion-2  瘦高身材 · 独眼（右侧镜片隐藏）
+    .minion-3  矮胖身材 · 独眼（右侧镜片隐藏）
+    .minion-4  高个身材 · 双眼
+  窄屏下舞台可横向滚动浏览。
+-->
+    <div class="stage">
+      <div class="minion minion-1">
+        <div class="hairs">
+          <div class="hair1"></div>
+          <div class="hair2"></div>
+          <div class="hair3"></div>
+        </div>
+        <div class="body">
+          <div class="cloth"></div>
+          <div class="straps left-straps"><div class="fastener"></div></div>
+          <div class="straps right-straps"><div class="fastener"></div></div>
+        </div>
+        <div class="glasses-type"></div>
+        <div class="glasses left-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="glasses right-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="mouth">
+          <div class="tooths">
+            <div class="line"></div>
+            <div class="tooth1"></div>
+            <div class="tooth2"></div>
+            <div class="tooth3"></div>
+          </div>
+        </div>
+        <div class="arm left-arm"><div class="hand"></div></div>
+        <div class="arm right-arm"><div class="hand"></div></div>
+        <div class="pocket">
+          <div><div></div></div>
+        </div>
+        <div class="trousers"></div>
+        <div class="leg left-leg"><div class="footer"></div></div>
+        <div class="leg right-leg"><div class="footer"></div></div>
+      </div>
 
-		<div class="minion-2">
-			<div class="hairs">
-				<div class="hair1"></div>
-				<div class="hair2"></div>
-				<div class="hair3"></div>
-			</div>
-			<div class="body">
-				<div class="cloth"></div>
-				<div class="straps left-straps">
-					<div class="fastener"></div>
-				</div>
-				<div class="straps right-straps">
-					<div class="fastener"></div>
-				</div>
-			</div>
-			<div class="glasses-type"></div>
-			<div class="glasses left-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="glasses right-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="mouth">
-				<div class="tooths">
-					<div class="line"></div>
-					<div class="tooth1"></div>
-					<div class="tooth2"></div>
-					<div class="tooth3"></div>
-				</div>
-			</div>
-			<div class="arm left-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="arm right-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="pocket">
-				<div>
-					<div></div>
-				</div>
-			</div>
-			<div class="trousers"></div>
-			<div class="leg left-leg">
-				<div class="footer"></div>
-			</div>
-			<div class="leg right-leg">
-				<div class="footer"></div>
-			</div>
-		</div>
+      <div class="minion minion-2">
+        <div class="hairs">
+          <div class="hair1"></div>
+          <div class="hair2"></div>
+          <div class="hair3"></div>
+        </div>
+        <div class="body">
+          <div class="cloth"></div>
+          <div class="straps left-straps"><div class="fastener"></div></div>
+          <div class="straps right-straps"><div class="fastener"></div></div>
+        </div>
+        <div class="glasses-type"></div>
+        <div class="glasses left-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="glasses right-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="mouth">
+          <div class="tooths">
+            <div class="line"></div>
+            <div class="tooth1"></div>
+            <div class="tooth2"></div>
+            <div class="tooth3"></div>
+          </div>
+        </div>
+        <div class="arm left-arm"><div class="hand"></div></div>
+        <div class="arm right-arm"><div class="hand"></div></div>
+        <div class="pocket">
+          <div><div></div></div>
+        </div>
+        <div class="trousers"></div>
+        <div class="leg left-leg"><div class="footer"></div></div>
+        <div class="leg right-leg"><div class="footer"></div></div>
+      </div>
 
-		<div class="minion-3">
-			<div class="hairs">
-				<div class="hair1"></div>
-				<div class="hair2"></div>
-				<div class="hair3"></div>
-			</div>
-			<div class="body">
-				<div class="cloth"></div>
-				<div class="straps left-straps">
-					<div class="fastener"></div>
-				</div>
-				<div class="straps right-straps">
-					<div class="fastener"></div>
-				</div>
-			</div>
-			<div class="glasses-type"></div>
-			<div class="glasses left-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="glasses right-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="mouth">
-				<div class="tooths">
-					<div class="line"></div>
-					<div class="tooth1"></div>
-					<div class="tooth2"></div>
-					<div class="tooth3"></div>
-				</div>
-			</div>
-			<div class="arm left-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="arm right-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="pocket">
-				<div>
-					<div></div>
-				</div>
-			</div>
-			<div class="trousers"></div>
-			<div class="leg left-leg">
-				<div class="footer"></div>
-			</div>
-			<div class="leg right-leg">
-				<div class="footer"></div>
-			</div>
-		</div>
+      <div class="minion minion-3">
+        <div class="hairs">
+          <div class="hair1"></div>
+          <div class="hair2"></div>
+          <div class="hair3"></div>
+        </div>
+        <div class="body">
+          <div class="cloth"></div>
+          <div class="straps left-straps"><div class="fastener"></div></div>
+          <div class="straps right-straps"><div class="fastener"></div></div>
+        </div>
+        <div class="glasses-type"></div>
+        <div class="glasses left-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="glasses right-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="mouth">
+          <div class="tooths">
+            <div class="line"></div>
+            <div class="tooth1"></div>
+            <div class="tooth2"></div>
+            <div class="tooth3"></div>
+          </div>
+        </div>
+        <div class="arm left-arm"><div class="hand"></div></div>
+        <div class="arm right-arm"><div class="hand"></div></div>
+        <div class="pocket">
+          <div><div></div></div>
+        </div>
+        <div class="trousers"></div>
+        <div class="leg left-leg"><div class="footer"></div></div>
+        <div class="leg right-leg"><div class="footer"></div></div>
+      </div>
 
-		<div class="minion-4">
-			<div class="hairs">
-				<div class="hair1"></div>
-				<div class="hair2"></div>
-				<div class="hair3"></div>
-			</div>
-			<div class="body">
-				<div class="cloth"></div>
-				<div class="straps left-straps">
-					<div class="fastener"></div>
-				</div>
-				<div class="straps right-straps">
-					<div class="fastener"></div>
-				</div>
-			</div>
-			<div class="glasses-type"></div>
-			<div class="glasses left-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="glasses right-glasses">
-				<div class="eye">
-					<div class="ball">
-						<strong></strong></div>
-				</div>
-			</div>
-			<div class="mouth">
-				<div class="tooths">
-					<div class="line"></div>
-					<div class="tooth1"></div>
-					<div class="tooth2"></div>
-					<div class="tooth3"></div>
-				</div>
-			</div>
-			<div class="arm left-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="arm right-arm">
-				<div class="hand"></div>
-			</div>
-			<div class="pocket">
-				<div>
-					<div></div>
-				</div>
-			</div>
-			<div class="trousers"></div>
-			<div class="leg left-leg">
-				<div class="footer"></div>
-			</div>
-			<div class="leg right-leg">
-				<div class="footer"></div>
-			</div>
-		</div>
-<!--test-in-2019-05-16-->
-	</body>
+      <div class="minion minion-4">
+        <div class="hairs">
+          <div class="hair1"></div>
+          <div class="hair2"></div>
+          <div class="hair3"></div>
+        </div>
+        <div class="body">
+          <div class="cloth"></div>
+          <div class="straps left-straps"><div class="fastener"></div></div>
+          <div class="straps right-straps"><div class="fastener"></div></div>
+        </div>
+        <div class="glasses-type"></div>
+        <div class="glasses left-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="glasses right-glasses">
+          <div class="eye">
+            <div class="ball"><strong></strong></div>
+          </div>
+        </div>
+        <div class="mouth">
+          <div class="tooths">
+            <div class="line"></div>
+            <div class="tooth1"></div>
+            <div class="tooth2"></div>
+            <div class="tooth3"></div>
+          </div>
+        </div>
+        <div class="arm left-arm"><div class="hand"></div></div>
+        <div class="arm right-arm"><div class="hand"></div></div>
+        <div class="pocket">
+          <div><div></div></div>
+        </div>
+        <div class="trousers"></div>
+        <div class="leg left-leg"><div class="footer"></div></div>
+        <div class="leg right-leg"><div class="footer"></div></div>
+      </div>
+    </div>
+  </body>
 </html>

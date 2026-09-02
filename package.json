@@ -1,0 +1,19 @@
+{
+  "name": "project-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "纯前端趣味 demo 合集（confession 爱心树表白 / minions CSS3 小黄人 / 3DPeriodicTable 3D 元素周期表）",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.6"
+  }
+}
