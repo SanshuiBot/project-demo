@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <meta name="description" content="爱心树表白动画——把程序员的浪漫送给亲爱的 TA" />
     <title>爱心树表白 · 程序员的情书</title>
 
@@ -12,6 +12,15 @@
     <script src="renxi/love.js"></script>
   </head>
   <body>
+    <!-- 点击引导浮层：动画开始前显示，点击后消失 -->
+    <div id="hint" class="hint">
+      <div class="hint-card">
+        <div class="hint-heart">💗</div>
+        <div class="hint-title">有一颗种子，等你唤醒</div>
+        <div class="hint-sub">轻触屏幕 · 让爱慢慢生长</div>
+        <div class="hint-arrow">↓</div>
+      </div>
+    </div>
     <audio id="bgm" src="renxi.mp3" preload="auto"></audio>
     <button id="sound" type="button" title="播放 / 暂停背景音乐" aria-label="播放或暂停背景音乐">
       🎵

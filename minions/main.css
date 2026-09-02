@@ -81,6 +81,13 @@ body {
   background: #96004a;
   margin: 0;
   padding: 0;
+  /* 窄屏时禁止 body 横向滚动，缩放由 .stage-zoomer 处理 */
+}
+
+.stage-zoomer {
+  width: 100%;
+  transform-origin: top left;
+  will-change: transform;
 }
 
 .stage {

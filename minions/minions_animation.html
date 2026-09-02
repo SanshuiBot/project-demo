@@ -17,6 +17,7 @@
     .minion-4  高个身材 · 双眼
   窄屏下舞台可横向滚动浏览。
 -->
+    <div class="stage-zoomer">
     <div class="stage">
       <div class="minion minion-1">
         <div class="hairs">
@@ -178,5 +179,32 @@
         <div class="leg right-leg"><div class="footer"></div></div>
       </div>
     </div>
+    </div>
+    </div>
   </body>
-</html>
+  <script>
+    (function () {
+      "use strict";
+      var BASE_WIDTH = 1200;
+      var zoomer = document.querySelector(".stage-zoomer");
+      if (!zoomer) return;
+
+      function fit() {
+        var vw = document.documentElement.clientWidth;
+        var scale = Math.min(1, vw / BASE_WIDTH);
+        if (scale < 1) {
+          zoomer.style.transformOrigin = "top left";
+          zoomer.style.transform = "scale(" + scale + ")";
+          zoomer.style.width = BASE_WIDTH + "px";
+        } else {
+          zoomer.style.transform = "";
+          zoomer.style.transformOrigin = "";
+          zoomer.style.width = "";
+        }
+      }
+
+      window.addEventListener("resize", fit);
+      window.addEventListener("orientationchange", function () { setTimeout(fit, 200); });
+      fit();
+    })();
+  </script>

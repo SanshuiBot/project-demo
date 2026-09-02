@@ -130,3 +130,86 @@ a {
 #sound:active {
   transform: scale(0.96);
 }
+
+/* ===== 点击引导浮层 ===== */
+.hint {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(180, 20, 60, 0.35);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  animation: hint-bg-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-bg-pulse {
+  0%, 100% { background: rgba(180, 20, 60, 0.35); }
+  50%       { background: rgba(180, 20, 60, 0.22); }
+}
+
+.hint-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 36px 48px 30px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 8px 32px rgba(160, 20, 60, 0.28),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: hint-card-float 2.6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes hint-card-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+.hint-heart {
+  font-size: 56px;
+  line-height: 1;
+  animation: heart-beat 1s ease-in-out infinite;
+  filter: drop-shadow(0 4px 12px rgba(200, 30, 80, 0.4));
+}
+
+@keyframes heart-beat {
+  0%, 100% { transform: scale(1); }
+  15%       { transform: scale(1.22); }
+  30%       { transform: scale(1); }
+  45%       { transform: scale(1.15); }
+  60%       { transform: scale(1); }
+}
+
+.hint-title {
+  font-size: clamp(18px, 3.5vw, 24px);
+  font-weight: 800;
+  color: #a8203b;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.hint-sub {
+  font-size: clamp(13px, 2.5vw, 15px);
+  color: #c06080;
+  letter-spacing: 2px;
+  margin-top: -2px;
+}
+
+.hint-arrow {
+  margin-top: 10px;
+  font-size: 22px;
+  color: #e06090;
+  animation: arrow-bounce 1.4s ease-in-out infinite;
+}
+
+@keyframes arrow-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%       { transform: translateY(6px); opacity: 1; }
+}
