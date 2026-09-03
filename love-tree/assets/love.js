@@ -1,4 +1,10 @@
-﻿(function (window) {
+﻿/**
+ * love.js —— Canvas 绘制引擎（纯原生，无第三方依赖）
+ * 对外只暴露 window.Tree；动画时序编排与文案/时间配置见 main.js。
+ */
+(function (window) {
+  "use strict";
+
   function random(min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
   }
@@ -78,6 +84,7 @@
     },
   };
 
+  /* ===== 心形种子（可点击的“Come on, baby”，含缩小、下落逻辑） ===== */
   var Seed = function (tree, point, scale, color) {
     this.tree = tree;
 
@@ -91,7 +98,7 @@
       figure: new Heart(),
     };
 
-    this.cirle = {
+    this.circle = {
       point: point,
       scale: scale,
       color: color,
@@ -104,10 +111,10 @@
       this.drawText();
     },
     addPosition: function (x, y) {
-      this.cirle.point = this.cirle.point.add(new Point(x, y));
+      this.circle.point = this.circle.point.add(new Point(x, y));
     },
     canMove: function () {
-      return this.cirle.point.y < this.tree.height + 20;
+      return this.circle.point.y < this.tree.height + 20;
     },
     move: function (x, y) {
       this.clear();
@@ -147,11 +154,11 @@
     },
     drawCirle: function () {
       var ctx = this.tree.ctx,
-        cirle = this.cirle;
-      var point = cirle.point,
-        color = cirle.color,
-        scale = cirle.scale,
-        radius = cirle.radius;
+        circle = this.circle;
+      var point = circle.point,
+        color = circle.color,
+        scale = circle.scale,
+        radius = circle.radius;
       ctx.save();
       ctx.fillStyle = color;
       ctx.translate(point.x, point.y);
@@ -169,35 +176,36 @@
       var point = heart.point,
         color = heart.color,
         scale = heart.scale;
+      var text = "Come on, baby";
       ctx.save();
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
       ctx.translate(point.x, point.y);
       ctx.scale(scale, scale);
-      ctx.moveTo(0, 0);
-      ctx.lineTo(15, 15);
-      ctx.lineTo(60, 15);
+      ctx.scale(0.75, 0.75);
+      ctx.font = "12px 微软雅黑,Verdana";
+      var width = ctx.measureText(text).width; // 下划线长度随文案自适应，盖住整行字
+      ctx.beginPath();
+      ctx.moveTo(0, 0); // 从心形中心引出小尾巴
+      ctx.lineTo(20, 20);
+      ctx.lineTo(23 + width + 6, 20); // 水平线覆盖到文字末尾
       ctx.stroke();
 
-      ctx.moveTo(0, 0);
-      ctx.scale(0.75, 0.75);
-      ctx.font = "12px 微软雅黑,Verdana"; // 字号肿么没有用? (ˉ(∞)ˉ)
-      ctx.fillText("Come Baby", 23, 10);
+      ctx.fillText(text, 23, 10);
       ctx.restore();
     },
     clear: function () {
       var ctx = this.tree.ctx,
-        cirle = this.cirle;
-      var point = cirle.point,
-        scale = cirle.scale,
-        radius = 26;
-      var w = radius * scale,
-        h = w;
-      ctx.clearRect(point.x - w, point.y - h, 4 * w, 4 * h);
+        circle = this.circle;
+      var point = circle.point;
+      // 心形 + "Come on, baby" 标签向右伸出较远（下划线末端约 +180px），
+      // 擦除区域要足够大，避免缩小/下落时残留半个字母和线尾
+      var margin = 90;
+      ctx.clearRect(point.x - margin, point.y - margin, 4 * margin, 4 * margin);
     },
     hover: function (x, y) {
       // 先做包围盒粗筛，避免在 mousemove 高频下逐像素读取
-      var point = this.cirle.point;
+      var point = this.circle.point;
       if (x < point.x - 260 || x > point.x + 260 || y < point.y - 260 || y > point.y + 260) {
         return false;
       }
@@ -207,6 +215,7 @@
     },
   };
 
+  /* ===== 地面（种子下落时逐帧铺开的土层） ===== */
   var Footer = function (tree, width, height, speed) {
     this.tree = tree;
     this.point = new Point(tree.seed.heart.point.x, tree.height - height / 2);
@@ -240,6 +249,7 @@
     },
   };
 
+  /* ===== 树：统筹种子、地面、树枝与花瓣的容器 ===== */
   var Tree = function (canvas, width, height, opt) {
     this.canvas = canvas;
     // willReadFrequently：hover 需频繁 getImageData 像素回读，显式声明以消除 Chrome 警告并提速
@@ -483,6 +493,7 @@
     },
   };
 
+  /* ===== 树枝：沿贝塞尔曲线逐帧生长的节点 ===== */
   var Branch = function (tree, point1, point2, point3, radius, length, branchs) {
     this.tree = tree;
     this.point1 = point1;
@@ -525,6 +536,7 @@
     },
   };
 
+  /* ===== 花瓣：开花期绽放、飘落期持续下落 ===== */
   var Bloom = function (tree, point, figure, color, alpha, angle, scale, place, speed) {
     this.tree = tree;
     this.point = point;

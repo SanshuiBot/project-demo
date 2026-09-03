@@ -6,22 +6,13 @@
     <meta name="description" content="爱心树表白动画——把程序员的浪漫送给亲爱的 TA" />
     <title>爱心树表白 · 程序员的情书</title>
 
-    <link rel="stylesheet" href="renxi/default.css" />
+    <link rel="stylesheet" href="assets/default.css" />
 
-    <script src="renxi/functions.js"></script>
-    <script src="renxi/love.js"></script>
+    <script src="assets/functions.js"></script>
+    <script src="assets/love.js"></script>
   </head>
   <body>
-    <!-- 点击引导浮层：动画开始前显示，点击后消失 -->
-    <div id="hint" class="hint">
-      <div class="hint-card">
-        <div class="hint-heart">💗</div>
-        <div class="hint-title">有一颗种子，等你唤醒</div>
-        <div class="hint-sub">轻触屏幕 · 让爱慢慢生长</div>
-        <div class="hint-arrow">↓</div>
-      </div>
-    </div>
-    <audio id="bgm" src="renxi.mp3" preload="auto"></audio>
+    <audio id="bgm" src="assets/bgm.mp3" preload="auto"></audio>
     <button id="sound" type="button" title="播放 / 暂停背景音乐" aria-label="播放或暂停背景音乐">
       🎵
     </button>
@@ -50,10 +41,19 @@
           <span class="muted">已经是……</span>
           <div id="clock"></div>
         </div>
+        <!-- 点击引导：霓虹流光描边（非全屏，点击穿透，点中心形后消失） -->
+        <div id="guide" class="guide" aria-hidden="true">
+          <div class="guide-ring-glow">
+            <div class="guide-ring">
+              <i class="guide-sweep"></i>
+            </div>
+          </div>
+          <span class="guide-text">轻轻点它，让爱发芽</span>
+        </div>
         <canvas id="canvas" width="1100" height="680"></canvas>
       </div>
     </div>
 
-    <script src="renxi/main.js"></script>
+    <script src="assets/main.js"></script>
   </body>
 </html>

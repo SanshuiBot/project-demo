@@ -10,9 +10,9 @@
 | 入口 | Demo | 说明 | 在线预览 |
 | --- | --- | --- | --- |
 | 首页 | 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [立即打开](https://SanshuiBot.github.io/project-demo/) |
-| confession | 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [立即打开](https://SanshuiBot.github.io/project-demo/confession/index.html) |
-| minions | 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [立即打开](https://SanshuiBot.github.io/project-demo/minions/minions_animation.html) |
-| 3DPeriodicTable | 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [立即打开](https://SanshuiBot.github.io/project-demo/3DPeriodicTable/index.html) |
+| love-tree | 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [立即打开](https://SanshuiBot.github.io/project-demo/love-tree/index.html) |
+| css-minions | 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [立即打开](https://SanshuiBot.github.io/project-demo/css-minions/index.html) |
+| periodic-table-3d | 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [立即打开](https://SanshuiBot.github.io/project-demo/periodic-table-3d/index.html) |
 
 ## 项目特性
 
@@ -31,10 +31,10 @@
 cd project-demo
 python -m http.server 8080
 # 浏览器访问 http://localhost:8080/            → 导航首页
-#                 http://localhost:8080/confession/ 等 → 各 demo
+#                 http://localhost:8080/love-tree/ 等 → 各 demo
 ```
 
-> 提示：`minions` 的入口文件名为 `minions_animation.html`，其余两个 demo 均为 `index.html`；
+> 提示：三个 demo 的入口均已统一为各自目录下的 `index.html`；仓库根目录的 `index.html` 是导航首页。
 > 首页里的跳转全部使用相对路径，无论双击打开还是部署到子路径（如 `/project-demo/`）都能正确工作。
 
 ## 部署到 GitHub Pages
@@ -55,9 +55,9 @@ python -m http.server 8080
 | 页面 | 地址 |
 | --- | --- |
 | 导航首页 | `https://<user>.github.io/project-demo/` |
-| 爱心树表白 | `https://<user>.github.io/project-demo/confession/` |
-| 小黄人 | `https://<user>.github.io/project-demo/minions/minions_animation.html` |
-| 3D 周期表 | `https://<user>.github.io/project-demo/3DPeriodicTable/` |
+| 爱心树表白 | `https://<user>.github.io/project-demo/love-tree/` |
+| 小黄人 | `https://<user>.github.io/project-demo/css-minions/index.html` |
+| 3D 周期表 | `https://<user>.github.io/project-demo/periodic-table-3d/` |
 
 > 如果仓库是私有的，请先在 **Settings → Pages** 开启 Pages 服务（免费版需公开仓库）；
 > 之后每次 push 到 `main`，GitHub 都会自动重新部署，无需手动操作。
@@ -101,7 +101,7 @@ jobs:
 
 ---
 
-## 一、confession —— 爱心树表白
+## 一、love-tree —— 爱心树表白
 
 > 一颗承载着心意的爱心从枝头落下，化作参天大树，开出满树繁花；
 > 打字机逐字敲出写给 TA 的情话，倒计时默默记录“在一起”的每一天。
@@ -112,23 +112,23 @@ jobs:
 - 🌳 **Canvas 动画**：贝塞尔曲线树枝生长、700 个花瓣缓放与飘落，全部由 `love.js` 绘制引擎完成；
 - ⌨️ **打字机情书**：逐字打印表白文案（自动跳过 HTML 标签，光标闪烁）；
 - ⏱️ **相恋计时器**：实时刷新“第 N 天 N 小时 N 分 N 秒”；
-- 🎵 **背景音乐**：右下角悬浮按钮可播放/暂停（`renxi.mp3`，受浏览器自动播放策略限制，首次点击页面后自动开播）；
+- 🎵 **背景音乐**：右下角悬浮按钮可播放/暂停（`assets/bgm.mp3`，受浏览器自动播放策略限制，首次点击页面后自动开播）；
 - 📱 **响应式缩放**：以 1100px 设计稿为准，窄屏自动等比缩放居中；
 - ♿ **兼容检测**：不支持 Canvas 时优雅提示更换现代浏览器。
 
 ### 如何改成你自己的告白
 1. **文字**：打开 `index.html`，把 `<span class="say">` 里的 `×××` 替换成 TA 与你的名字；
-2. **时间**：打开 `renxi/main.js` 顶部的 `TOGETHER` 配置项，填上你们在一起的年月日时分秒；
-3. **音乐**：替换 `renxi.mp3` 即可（推荐 44.1kHz、MP3 格式）。
+2. **时间**：打开 `assets/main.js` 顶部的 `TOGETHER` 配置项，填上你们在一起的年月日时分秒；
+3. **音乐**：替换 `assets/bgm.mp3` 即可（推荐 44.1kHz、MP3 格式）。
 
 ### 技术栈与结构
 原生 JavaScript（ES2017 `async/await` 编排动画时序）+ Canvas 2D，无任何第三方 JS 库 / 无 CDN / 无任何外网请求。
 
 ```
-confession/
+love-tree/
 ├── index.html            # 页面骨架 + 表白文案
-├── renxi.mp3             # 背景音乐
-└── renxi/
+└── assets/
+    ├── bgm.mp3           # 背景音乐
     ├── default.css       # 页面与舞台样式（含响应式）
     ├── functions.js      # 打字机 / 计时器 / 舞台缩放等通用函数
     ├── love.js           # Canvas 绘制引擎（心形种子、树枝、花瓣）
@@ -137,7 +137,7 @@ confession/
 
 ---
 
-## 二、minions —— 纯 CSS3 小黄人
+## 二、css-minions —— 纯 CSS3 小黄人
 
 > 不借助任何图片与脚本，仅用 DIV + CSS3 绘制出会眨眼、嘴巴张合的小黄人军团。
 
@@ -151,28 +151,26 @@ confession/
 | `.minion-3` | 矮胖（1.15 × 1.02） | 单眼 |
 | `.minion-4` | 高个（1.0 × 1.1） | 双眼 |
 
-> 页面 HTML 中的 `<!-- 注释 -->` 说明了各变体差异；单/双眼与体型均由 LESS 混入 `Minion(@width; @height; @eye)` 参数化控制。
+> 页面 HTML 中的 `<!-- 注释 -->` 说明了各变体差异；单/双眼与体型由四个 `.minion-N` 变体的宽高尺寸区分。
 
 ### 技术要点
 - **CSS3 造型**：圆角、边框、`z-index` 分层堆叠出头发、护目镜、嘴巴、背带裤、口袋等全部细节；
 - **关键帧动画**：`eye`（眼球横移）与 `up-down`（嘴巴张合）两个无限循环动画；
-- **LESS 混入**：`main.less` 中用一份 `Minion()` 混入生成四种体型，改参数即可出新变体；
 - **可访问性**：系统开启“减弱动态效果”（`prefers-reduced-motion`）时自动停掉循环动画；
 - **窄屏适配**：舞台（`.stage`）支持横向滚动浏览，手机也能看完整支队伍。
 
-### 修改与重新编译样式
-样式源文件为 `minions/main.less`（页面实际加载的是编译产物 `main.css`）。调整混入参数或颜色后，使用任意 LESS 编译器（如 `lessc main.less main.css`）重新生成即可；直接手改 `main.css` 同样有效。
+### 修改样式
+样式统一维护在 `css-minions/main.css`（曾由 LESS 混入 `main.less` 编译而来，该文件已移除）。直接编辑 `main.css` 即可，无需任何编译步骤。
 
 ```
-minions/
-├── minions_animation.html   # 页面（四个小黄人的 DOM 结构）
-├── main.css                 # 编译产物（页面实际加载）
-└── main.less                # 样式源文件（推荐在此修改）
+css-minions/
+├── index.html     # 页面（四个小黄人的 DOM 结构）
+└── main.css       # 样式文件（页面实际加载，直接编辑）
 ```
 
 ---
 
-## 三、3DPeriodicTable —— 3D 元素周期表（three.js CSS3D）
+## 三、periodic-table-3d —— 3D 元素周期表（three.js CSS3D）
 
 > 118 个化学元素以 3D 卡片呈现，四种布局任意切换，拖拽旋转、滚轮缩放，身临其境“玩”周期表。
 
@@ -190,7 +188,7 @@ minions/
 
 ### 结构说明
 ```
-3DPeriodicTable/
+periodic-table-3d/
 ├── index.html        # 页面 + 样式 + 布局菜单
 └── js/
     ├── main.js              # 主控逻辑与元素数据（新增，原内联于 HTML）
@@ -200,7 +198,7 @@ minions/
     └── CSS3DRenderer.js     # CSS3D 渲染器（本地依赖）
 ```
 
-> 说明：`3DPeriodicTable/js/` 下的 `three.min.js` 等为**本地第三方库文件**，随仓库分发而非 CDN 引用，
+> 说明：`periodic-table-3d/js/` 下的 `three.min.js` 等为**本地第三方库文件**，随仓库分发而非 CDN 引用，
 > 因此部署后依然没有任何外网请求，属于仓库内唯一的“依赖”，请勿删除。
 
 ---
@@ -210,7 +208,6 @@ minions/
 - **保持零依赖**：仓库刻意不引入 npm / 构建工具 / 工具链。曾引入的 ESLint + Prettier 已移除——
   对纯静态页面价值有限，反而增加 `node_modules` 体积与克隆负担。改动代码后无需 `npm install` / `lint`，刷新浏览器即可验证；
 - **代码风格**：沿用各文件现有缩进（2 空格）与注释密度；新代码保持无外部请求、可离线运行；
-- **LESS**：仅 `minions/main.less` 涉及编译，改完用 `lessc` 重新生成 `main.css`（详见小黄人章节）；
 - **提交信息**：遵循 Conventional Commits（如 `feat:` / `fix:` / `chore:`）。
 
 ## 近期更新
@@ -222,9 +219,9 @@ minions/
 
 ```
 project-demo/
-├── README.md             # 项目文档（即本文件）
-├── index.html            # 导航首页（深色玻璃拟态卡片，链接到下方三个 demo）
-├── confession/           # 爱心树表白（Canvas + async/await，无第三方库）
-├── minions/              # 纯 CSS3 小黄人（LESS + CSS3 动画）
-└── 3DPeriodicTable/      # 3D 元素周期表（three.js CSS3D，本地库文件）
+├── README.md               # 项目文档（即本文件）
+├── index.html              # 导航首页（深色玻璃拟态卡片，链接到下方三个 demo）
+├── love-tree/              # 爱心树表白（Canvas + async/await，无第三方库）
+├── css-minions/            # 纯 CSS3 小黄人（纯 CSS3 造型 + 关键帧动画）
+└── periodic-table-3d/      # 3D 元素周期表（three.js CSS3D，本地库文件）
 ```

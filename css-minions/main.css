@@ -1,4 +1,4 @@
-/* 由 main.less 编译并做四段去重整理；重新编译: lessc main.less main.css */
+/* 纯 CSS3 小黄人样式（原 main.less 混入产物已并入整理，本文件为唯一样式源） */
 
 @-webkit-keyframes eye {
 
@@ -78,23 +78,32 @@
 
 body {
 
+  /* 弹性布局让舞台主体水平垂直居中；内容高于视口时容器自动撑开，避免顶部被裁切 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   background: #96004a;
   margin: 0;
   padding: 0;
   /* 窄屏时禁止 body 横向滚动，缩放由 .stage-zoomer 处理 */
+  overflow-x: hidden;
 }
 
 .stage-zoomer {
+  flex: 0 0 auto; /* 作为 body 弹性布局的子项时禁止收缩，保持缩放基准宽度 */
   width: 100%;
-  transform-origin: top left;
+  transform-origin: center center;
   will-change: transform;
 }
 
+/* 舞台：四个小黄人以弹性行排布，space-evenly 等间距分布 */
 .stage {
-
-  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
   width: 100%;
-  min-height: 560px;
+  height: 560px; /* 固定为视觉内容带高度，作为垂直居中的基准 */
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -107,14 +116,9 @@ div {
 
 .minion-1 {
 
-  z-index: 1;
-  top: 50px;
-  left: 0;
   width: 380px;
   height: 700px;
-  position: absolute;
-  margin-top: -100px;
-  margin-left: -20px;
+  margin-top: -57.5px; /* 原绝对定位的净垂直偏移（top 50 - 107.5），保持脚线对齐 */
   -webkit-transform: scale(0.5, 0.5);
       -ms-transform: scale(0.5, 0.5);
           transform: scale(0.5, 0.5);
@@ -583,14 +587,9 @@ div {
 
 .minion-2 {
 
-  z-index: 2;
-  top: 0;
-  left: 24%;
   width: 334.4px;
   height: 770px;
-  position: absolute;
-  margin-top: -100px;
-  margin-left: -20px;
+  margin-top: -107.5px;
   -webkit-transform: scale(0.5, 0.5);
       -ms-transform: scale(0.5, 0.5);
           transform: scale(0.5, 0.5);
@@ -638,14 +637,9 @@ div {
 
 .minion-3 {
 
-  z-index: 2;
-  top: 44px;
-  left: 42%;
   width: 437px;
   height: 714px;
-  position: absolute;
-  margin-top: -100px;
-  margin-left: -20px;
+  margin-top: -63.5px; /* 原绝对定位的净垂直偏移（top 44 - 107.5），保持脚线对齐 */
   -webkit-transform: scale(0.5, 0.5);
       -ms-transform: scale(0.5, 0.5);
           transform: scale(0.5, 0.5);
@@ -664,14 +658,9 @@ div {
 
 .minion-4 {
 
-  z-index: 1;
-  top: 5px;
-  left: 67%;
   width: 380px;
   height: 770px;
-  position: absolute;
-  margin-top: -100px;
-  margin-left: -20px;
+  margin-top: -102.5px; /* 原绝对定位的净垂直偏移（top 5 - 107.5），保持脚线对齐 */
   -webkit-transform: scale(0.5, 0.5);
       -ms-transform: scale(0.5, 0.5);
           transform: scale(0.5, 0.5);

@@ -9,13 +9,13 @@
   </head>
   <body>
     <!--
-  舞台：小黄人以绝对定位排成一排。
+  舞台：四个小黄人以弹性行排布，整行由 flex 水平居中。
   四个实例结构完全相同，仅通过 .minion-1 ~ .minion-4 上的 CSS 区分大小与单/双眼：
     .minion-1  标准尺寸 · 双眼
     .minion-2  瘦高身材 · 独眼（右侧镜片隐藏）
     .minion-3  矮胖身材 · 独眼（右侧镜片隐藏）
     .minion-4  高个身材 · 双眼
-  窄屏下舞台可横向滚动浏览。
+  窄屏下整行由下方脚本按 BASE_WIDTH 等比缩放居中。
 -->
     <div class="stage-zoomer">
     <div class="stage">
@@ -185,7 +185,8 @@
   <script>
     (function () {
       "use strict";
-      var BASE_WIDTH = 1200;
+      // 四只小黄人弹性行的布局总宽：380 + 334.4 + 437 + 380 = 1531.4px
+      var BASE_WIDTH = 1531.4;
       var zoomer = document.querySelector(".stage-zoomer");
       if (!zoomer) return;
 
@@ -193,13 +194,24 @@
         var vw = document.documentElement.clientWidth;
         var scale = Math.min(1, vw / BASE_WIDTH);
         if (scale < 1) {
-          zoomer.style.transformOrigin = "top left";
-          zoomer.style.transform = "scale(" + scale + ")";
+          // 先清除缩放，测量舞台未缩放时的布局几何
+          zoomer.style.transform = "";
+          var box = zoomer.getBoundingClientRect();
+          var vh = document.documentElement.clientHeight;
+          var visH = box.height * scale; // 缩放后的实际视觉高度
+
+          // 视觉高度高于视口：不做上移，保持从顶部可滚动看到全部内容；
+          // 视觉高度不高于视口：垂直居中，并隐藏页面滚动条消除空白滚动区
+          var shiftY = visH > vh ? 0 : vh / 2 - (box.top + box.height / 2);
+          zoomer.style.transformOrigin = "center center";
+          zoomer.style.transform = "translateY(" + shiftY + "px) scale(" + scale + ")";
           zoomer.style.width = BASE_WIDTH + "px";
+          document.documentElement.style.overflow = visH > vh ? "" : "hidden";
         } else {
           zoomer.style.transform = "";
           zoomer.style.transformOrigin = "";
           zoomer.style.width = "";
+          document.documentElement.style.overflow = "";
         }
       }
 

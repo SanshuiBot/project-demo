@@ -4,6 +4,7 @@
  * - timeElapse : 渲染“在一起”时长
  * - fadeIn     : 简单的透明度淡入
  * - fitStage   : 按视口宽度对 1100px 舞台等比缩放并居中
+ * - stageScale : 全局只读的当前缩放比（供指针坐标换算）
  */
 (function (window) {
   "use strict";
@@ -82,14 +83,25 @@
     if (!wrap) return stageScale;
 
     var vw = doc.documentElement.clientWidth;
+    var vh = doc.documentElement.clientHeight;
     stageScale = Math.min(1, (vw - 16) / BASE_WIDTH);
 
     if (stageScale < 1) {
-      var tx = Math.max(0, (vw - BASE_WIDTH * stageScale) / 2);
-      wrap.style.transformOrigin = "left top";
-      wrap.style.transform = "translateX(" + tx + "px) scale(" + stageScale + ")";
+      // 先清除缩放，测量舞台未缩放时的布局几何
+      wrap.style.transform = "";
+      var box = wrap.getBoundingClientRect();
+      var visH = box.height * stageScale; // 缩放后的实际视觉高度
+
+      // 视觉高度高于视口：不做上移，保持从顶部可滚动看到全部内容
+      //（负位移会把内容顶出滚动区外，永远无法滚回）；
+      // 视觉高度不高于视口：垂直居中，并隐藏页面滚动条消除底部空白滚动区
+      var shiftY = visH > vh ? 0 : vh / 2 - (box.top + box.height / 2);
+      wrap.style.transformOrigin = "center center";
+      wrap.style.transform = "translateY(" + shiftY + "px) scale(" + stageScale + ")";
+      doc.documentElement.style.overflow = visH > vh ? "" : "hidden";
     } else {
       wrap.style.transform = "";
+      doc.documentElement.style.overflow = "";
     }
     return stageScale;
   }
@@ -106,6 +118,7 @@
     fadeIn: fadeIn,
     fitStage: fitStage,
   };
+  // stageScale：对外暴露当前缩放比（main.js 换算指针坐标时读取）
   Object.defineProperty(window, "stageScale", {
     get: function () {
       return stageScale;

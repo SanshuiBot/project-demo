@@ -113,8 +113,9 @@
       var p = toCanvas(e);
       if (!seed.hover(p.x, p.y)) return;
 
-      var hint = document.getElementById("hint");
-      if (hint) hint.style.display = "none";
+      // 动画开始，收掉引导提示
+      var guide = document.getElementById("guide");
+      if (guide) guide.style.display = "none";
       canvas.removeEventListener("click", onCanvasClick);
       canvas.removeEventListener("mousemove", onCanvasMove);
       canvas.classList.remove("hand");
@@ -123,16 +124,6 @@
 
     canvas.addEventListener("mousemove", onCanvasMove);
     canvas.addEventListener("click", onCanvasClick);
-
-    // 点击引导浮层直接启动动画（防止提示事件冒泡到 canvas）
-    var hint = document.getElementById("hint");
-    if (hint) {
-      hint.addEventListener("click", function (e) {
-        e.stopPropagation();
-        hint.style.display = "none";
-        resolve();
-      });
-    }
   });
 
   /* ================= 四幕动画（每幕为一段 async 协程，时序与旧版逐帧一致） ================= */

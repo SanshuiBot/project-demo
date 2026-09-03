@@ -1,0 +1,255 @@
+/* ===== 爱心树表白 · 全局样式 =====
+ * 纯 CSS 无依赖；页面按 1100px 设计稿布局，窄屏由 functions.js 等比缩放。
+ */
+
+:root {
+  /* 主题色板：想整体换色，改这里即可 */
+  --cream: #ffe; /* 页面底色（暖米白） */
+  --ink: #231f20; /* 主文字 / 深色 */
+  --muted: #666; /* 次要文字 */
+}
+
+/* ===== 基础重置 ===== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font:
+    14px/1.6 "微软雅黑",
+    "Microsoft YaHei",
+    "PingFang SC",
+    "宋体",
+    sans-serif;
+  overflow-x: hidden; /* 小屏由 JS 等比缩放，禁止横向滚动 */
+}
+
+/* ===== 舞台：主体水平垂直居中，内容超高时容器自动撑开 ===== */
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+#wrap {
+  position: relative;
+  width: 1100px; /* 设计稿宽度 */
+}
+
+/* ===== 情书文字与相恋计时（覆盖在画布上方） ===== */
+#text {
+  position: absolute;
+  left: 60px;
+  top: 80px;
+  width: 400px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#code {
+  display: none; /* 打字机动画开始时再显示 */
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+#clock-box {
+  position: absolute;
+  left: 60px;
+  top: 545px;
+  display: none; /* 计时开始时由 JS 淡入 */
+  opacity: 0;
+  font-size: 28px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+#clock-box .muted {
+  color: var(--muted);
+}
+
+#clock {
+  margin-left: 48px;
+}
+
+#clock .digit {
+  font-size: 58px;
+  color: var(--ink);
+}
+
+/* ===== 画布与错误提示 ===== */
+#canvas {
+  display: block;
+  width: 1100px;
+  height: 680px;
+}
+
+#error {
+  display: none;
+  margin: 80px auto 0;
+  max-width: 640px;
+  padding: 24px;
+  text-align: center;
+  line-height: 1.9;
+  color: var(--muted);
+}
+
+/* ===== 交互小工具 ===== */
+.hand {
+  cursor: pointer;
+}
+
+.say {
+  margin-left: 5px;
+}
+
+.space {
+  margin-right: 150px;
+}
+
+/* ===== 背景音乐开关（右下角悬浮） ===== */
+#sound {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 99;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  line-height: 1;
+  border: none;
+  border-radius: 50%;
+  background: rgba(35, 31, 32, 0.82);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+#sound:hover {
+  background: rgba(190, 26, 37, 0.9);
+  transform: scale(1.08);
+}
+
+#sound:active {
+  transform: scale(0.96);
+}
+
+/* ===== 点击引导：霓虹流光描边（非全屏，点击穿透） ===== */
+/* 画布 1100×680，心形种子绘制于 (530, 340)：霓虹环以心形为中心，文字悬于其下方 */
+.guide {
+  position: absolute;
+  left: 530px;
+  top: 340px;
+  z-index: 5;
+  width: 0;
+  height: 0;
+  pointer-events: none; /* 不拦截点击：必须点画布上的心形种子才会启动动画 */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 外层承载霓虹泛光：置于 mask 之外，避免光晕被环带裁掉 */
+.guide-ring-glow {
+  position: absolute;
+  left: -75px;
+  top: -75px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 6px rgba(255, 77, 141, 0.85)) drop-shadow(0 0 18px rgba(125, 239, 255, 0.5));
+}
+
+/* 霓虹环：mask 只保留 78%–87% 半径的环带，其余镂空 */
+.guide-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  -webkit-mask-image: radial-gradient(closest-side, transparent 0 78%, #000 78% 87%, transparent 87%);
+  mask-image: radial-gradient(closest-side, transparent 0 78%, #000 78% 87%, transparent 87%);
+  animation: ring-breathe 2.4s ease-in-out infinite;
+}
+
+/* 静态微光环底：一圈淡淡的粉-青渐变，托住整体 */
+.guide-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 110, 170, 0.14),
+    rgba(120, 220, 255, 0.14),
+    rgba(255, 110, 170, 0.14)
+  );
+}
+
+/* 环绕飞驰的流光：粉色彗尾 + 白-青亮头，沿环带高速旋转 */
+.guide-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(125, 239, 255, 0) 0deg,
+    rgba(125, 239, 255, 0) 235deg,
+    rgba(255, 77, 141, 0.45) 300deg,
+    rgba(255, 77, 141, 0.95) 335deg,
+    #ffffff 352deg,
+    rgba(125, 239, 255, 1) 360deg
+  );
+  animation: sweep-spin 1.6s linear infinite;
+}
+
+@keyframes sweep-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 呼吸：整环轻微缩放 + 明暗起伏，像灯带呼吸 */
+@keyframes ring-breathe {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* 下方流光文字：粉-青渐变从左往右反复扫过 */
+.guide-text {
+  position: absolute;
+  left: 0;
+  top: 84px;
+  width: 300px;
+  margin-left: -150px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #ff4d8d, #2ec4ff, #ff4d8d);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: text-shimmer 2.4s linear infinite;
+}
+
+@keyframes text-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
