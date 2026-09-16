@@ -334,6 +334,19 @@
         text-decoration: underline;
       }
 
+      /* 页脚小图标：与项目列表同源的迷你版，随行内文字对齐 */
+      .made-with {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .mini-icon {
+        width: 20px;
+        height: 20px;
+      }
+
       /* ===== 响应式 / 减弱动态效果 ===== */
       @media (max-width: 640px) {
         main {
@@ -347,6 +360,15 @@
     </style>
   </head>
   <body>
+    <!-- SVG 雪碧图：三个项目图标各定义一次，缩略区与页脚通过 <use> 复用 -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <defs>
+        <symbol id="icon-love" viewBox="0 0 100 100"><path d="M50 88 C20 62 8 44 8 30 C8 16 20 8 32 8 C40 8 47 13 50 20 C53 13 60 8 68 8 C80 8 92 16 92 30 C92 44 80 62 50 88 Z" fill="#ff8fb3"/></symbol>
+        <symbol id="icon-minion" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#ffd94d"/><circle cx="50" cy="46" r="26" fill="#dededd" stroke="#1f1a17" stroke-width="4"/><circle cx="50" cy="46" r="14" fill="#8f5444" stroke="#1f1a17" stroke-width="4"/><circle cx="50" cy="46" r="5" fill="#1f1a17"/><rect x="24" y="80" width="52" height="14" rx="6" fill="#667ab3"/></symbol>
+        <symbol id="icon-table" viewBox="0 0 100 100"><g fill="none" stroke="#4fd8f2" stroke-width="5"><ellipse cx="50" cy="50" rx="42" ry="17"/><ellipse cx="50" cy="50" rx="42" ry="17" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="42" ry="17" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="9" fill="#6366f1"/></symbol>
+      </defs>
+    </svg>
+
     <div class="bg" aria-hidden="true">
       <span></span><span></span><span></span>
     </div>
@@ -363,7 +385,7 @@
 
       <section class="grid">
         <a class="card card-love" href="love-tree/index.html">
-          <div class="thumb"><svg class="emoji" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 88 C20 62 8 44 8 30 C8 16 20 8 32 8 C40 8 47 13 50 20 C53 13 60 8 68 8 C80 8 92 16 92 30 C92 44 80 62 50 88 Z" fill="#ff8fb3"/></svg></div>
+          <div class="thumb"><svg class="emoji" aria-hidden="true"><use href="#icon-love"/></svg></div>
           <div class="body">
             <h2>爱心树表白</h2>
             <p class="tagline">程序员的情书</p>
@@ -381,7 +403,7 @@
         </a>
 
         <a class="card card-minion" href="css-minions/index.html">
-          <div class="thumb"><svg class="emoji" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#ffd94d"/><circle cx="50" cy="46" r="26" fill="#dededd" stroke="#1f1a17" stroke-width="4"/><circle cx="50" cy="46" r="14" fill="#8f5444" stroke="#1f1a17" stroke-width="4"/><circle cx="50" cy="46" r="5" fill="#1f1a17"/><rect x="24" y="80" width="52" height="14" rx="6" fill="#667ab3"/></svg></div>
+          <div class="thumb"><svg class="emoji" aria-hidden="true"><use href="#icon-minion"/></svg></div>
           <div class="body">
             <h2>纯 CSS3 小黄人</h2>
             <p class="tagline">动画雕塑 · Minions</p>
@@ -399,7 +421,7 @@
         </a>
 
         <a class="card card-table" href="periodic-table-3d/index.html">
-          <div class="thumb"><svg class="emoji" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#4fd8f2" stroke-width="5"><ellipse cx="50" cy="50" rx="42" ry="17"/><ellipse cx="50" cy="50" rx="42" ry="17" transform="rotate(60 50 50)"/><ellipse cx="50" cy="50" rx="42" ry="17" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="9" fill="#6366f1"/></svg></div>
+          <div class="thumb"><svg class="emoji" aria-hidden="true"><use href="#icon-table"/></svg></div>
           <div class="body">
             <h2>3D 元素周期表</h2>
             <p class="tagline">three.js CSS3D</p>
@@ -424,7 +446,11 @@
             >项目仓库</a
           >
         </p>
-        <p>Made with ❤️ 💛 ⚛️ — 每一条链接都指向一段小心思</p>
+        <p class="made-with">Made with
+          <svg class="mini-icon" aria-hidden="true"><use href="#icon-love"/></svg>
+          <svg class="mini-icon" aria-hidden="true"><use href="#icon-minion"/></svg>
+          <svg class="mini-icon" aria-hidden="true"><use href="#icon-table"/></svg>
+          — 每一条链接都指向一段小心思</p>
       </footer>
     </main>
   </body>
