@@ -44,6 +44,10 @@
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 3000;
 
+    // 手机竖屏：表格宽约 2400（半宽 1200 + 卡片余量），纵向视野装不下横向全表，
+    // 按横向视野反推相机距离，保证整张表进入视野
+    fitCameraToTable();
+
     scene = new THREE.Scene();
 
     // 桌面排列：先随机散落，之后由 transform() 归位
@@ -129,7 +133,7 @@
     controls = new THREE.TrackballControls(camera, renderer.domElement);
     controls.rotateSpeed = 0.5;
     controls.minDistance = 500;
-    controls.maxDistance = 6000;
+    controls.maxDistance = Math.max(6000, camera.position.z + 1000); // 手机上初始距离更远，缩放上限随之放宽
     controls.addEventListener("change", render);
 
     // 菜单按钮：统一事件绑定
@@ -146,6 +150,23 @@
     // 图例底部展示数据更新时间（常量 DATA_UPDATED 定义在 element-data.js，更新数据时同步修改）
     var updatedEl = document.getElementById("data-updated");
     if (updatedEl) updatedEl.textContent = DATA_UPDATED;
+
+    // 手机端图例默认折叠，点标题展开/收起（折叠样式见 index.html 的 @media 规则）
+    var legend = document.getElementById("legend");
+    var legendTitle = legend && legend.querySelector(".legend-title");
+    if (legendTitle) {
+      var toggleLegend = function () {
+        var open = legend.classList.toggle("open");
+        legendTitle.setAttribute("aria-expanded", open ? "true" : "false");
+      };
+      legendTitle.addEventListener("click", toggleLegend);
+      legendTitle.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleLegend();
+        }
+      });
+    }
 
     setupDetailPanel();
 
@@ -208,20 +229,63 @@
       panel.classList.remove("open");
     }
 
-    // 双击元素卡片打开详情（事件委托，卡片在 3D 变换中动态跟踪）
-    renderer.domElement.addEventListener("dblclick", function (e) {
-      var target = e.target;
+    // 从事件目标向上找到元素卡片对应的下标（卡片在 3D 变换中动态跟踪，用事件委托）
+    function findCardIndex(target) {
       while (target && target !== renderer.domElement) {
         if (target.classList && target.classList.contains("element")) {
-          var index = objects.findIndex(function (o) {
+          return objects.findIndex(function (o) {
             return o.element === target;
           });
-          if (index !== -1) show(index);
-          return;
         }
         target = target.parentNode;
       }
+      return -1;
+    }
+
+    // 桌面：双击元素卡片打开详情
+    renderer.domElement.addEventListener("dblclick", function (e) {
+      var index = findCardIndex(e.target);
+      if (index !== -1) show(index);
     });
+
+    // 触屏：浏览器双击缩放会拦截 dblclick，自定义双击检测（两次快速、小位移的点按）
+    var lastTapTime = 0;
+    var lastTapIndex = -1;
+    var tapStart = null;
+
+    renderer.domElement.addEventListener(
+      "touchstart",
+      function (e) {
+        // 只记录单指起点；多指（捏合）不算点按
+        tapStart = e.touches.length === 1
+          ? { x: e.touches[0].clientX, y: e.touches[0].clientY, time: Date.now() }
+          : null;
+      },
+      false
+    );
+
+    renderer.domElement.addEventListener(
+      "touchend",
+      function (e) {
+        if (!tapStart || e.touches.length > 0) return; // 还有手指未抬起（手势未结束）
+        var dx = e.changedTouches[0].clientX - tapStart.x;
+        var dy = e.changedTouches[0].clientY - tapStart.y;
+        if (Math.abs(dx) + Math.abs(dy) > 15 || Date.now() - tapStart.time > 350) {
+          lastTapTime = 0; // 拖拽旋转或长按，不算点按
+          return;
+        }
+        var index = findCardIndex(e.changedTouches[0].target);
+        var now = Date.now();
+        if (index !== -1 && lastTapTime && now - lastTapTime < 400 && lastTapIndex === index) {
+          show(index);
+          lastTapTime = 0;
+        } else {
+          lastTapTime = now;
+          lastTapIndex = index;
+        }
+      },
+      false
+    );
 
     // 关闭交互：关闭按钮 / 点击遮罩 / Esc 键
     panel.querySelector(".d-close").addEventListener("click", hide);
@@ -318,10 +382,20 @@
       .start();
   }
 
+  /* 按横向视野反推相机距离（窄屏转屏后重新拟合），仅在需要更远时拉远，不干扰用户已拉近的视角 */
+  function fitCameraToTable() {
+    var fitZ = 1300 / (Math.tan((camera.fov / 2) * Math.PI / 180) * camera.aspect);
+    if (fitZ > camera.position.z) {
+      camera.position.z = fitZ;
+      if (controls) controls.maxDistance = Math.max(6000, fitZ + 1000);
+    }
+  }
+
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    fitCameraToTable();
     render();
   }
 

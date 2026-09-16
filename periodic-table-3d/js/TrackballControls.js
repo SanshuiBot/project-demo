@@ -59,6 +59,25 @@ THREE.TrackballControls = function ( object, domElement ) {
 	_panStart = new THREE.Vector2(),
 	_panEnd = new THREE.Vector2();
 
+	// 触摸手势：多指中心点（归一化到 0~1 屏幕坐标），双指时同时用于平移
+	function getTouchCenter( event, vector ) {
+
+		var x = 0, y = 0;
+
+		for ( var i = 0; i < event.touches.length; i++ ) {
+
+			x += event.touches[ i ].pageX;
+			y += event.touches[ i ].pageY;
+
+		}
+
+		return vector.set(
+			( x / event.touches.length - _this.screen.left ) / _this.screen.width,
+			( y / event.touches.length - _this.screen.top ) / _this.screen.height
+		);
+
+	}
+
 	// for reset
 
 	this.target0 = this.target.clone();
@@ -492,6 +511,10 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
+		// 阻止默认行为：避免浏览器滚动 / 双击缩放，以及触摸结束后补发的
+		// 模拟鼠标事件（会让卡片 hover 高亮"粘住"、看起来像左键点击）
+		event.preventDefault();
+
 		switch ( event.touches.length ) {
 
 			case 1:
@@ -500,10 +523,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 				break;
 
 			case 2:
+				// 双指 = 捏合缩放 + 拖动平移（移动端等价于鼠标滚轮 + 右键平移）
 				_state = STATE.TOUCH_ZOOM;
 				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
 				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 				_touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
+				_panEnd.copy( getTouchCenter( event, _panStart ) );
 				break;
 
 			case 3:
@@ -537,6 +562,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
 				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
 				_touchZoomDistanceEnd = Math.sqrt( dx * dx + dy * dy )
+				getTouchCenter( event, _panEnd );
 				break;
 
 			case 3:
@@ -554,24 +580,34 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		if ( _this.enabled === false ) return;
 
+		// 手势降级：松开手指后按剩余手指重新初始化（捏合中抬一根手指 → 继续单指旋转），
+		// 全部松开才结束手势
 		switch ( event.touches.length ) {
 
 			case 1:
-				_rotateStart.copy( _this.getMouseProjectionOnBall( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _rotateEnd ));
+				_state = STATE.TOUCH_ROTATE;
+				_rotateEnd.copy( _this.getMouseProjectionOnBall( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _rotateStart ));
 				break;
 
 			case 2:
-				_touchZoomDistanceStart = _touchZoomDistanceEnd = 0;
+				_state = STATE.TOUCH_ZOOM;
+				var dx = event.touches[ 0 ].pageX - event.touches[ 1 ].pageX;
+				var dy = event.touches[ 0 ].pageY - event.touches[ 1 ].pageY;
+				_touchZoomDistanceEnd = _touchZoomDistanceStart = Math.sqrt( dx * dx + dy * dy );
+				_panEnd.copy( getTouchCenter( event, _panStart ) );
 				break;
 
 			case 3:
-				_panStart.copy( _this.getMouseOnScreen( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _panEnd ));
+				_state = STATE.TOUCH_PAN;
+				_panEnd.copy( _this.getMouseOnScreen( event.touches[ 0 ].pageX, event.touches[ 0 ].pageY, _panStart ));
 				break;
 
-		}
+			default:
+				_state = STATE.NONE;
+				_this.dispatchEvent( endEvent );
+				return;
 
-		_state = STATE.NONE;
-		_this.dispatchEvent( endEvent );
+		}
 
 	}
 

@@ -84,9 +84,18 @@
         text-shadow: none;
       }
 
-      .element:hover {
-        box-shadow: 0 0 12px rgba(0, 255, 255, 0.75);
-        border: 1px solid rgba(127, 255, 255, 0.75);
+      /* 悬停高亮仅对真正有鼠标的设备生效，避免触屏点按后高亮"粘住"不消失 */
+      @media (hover: hover) {
+        .element:hover {
+          box-shadow: 0 0 12px rgba(0, 255, 255, 0.75);
+          border: 1px solid rgba(127, 255, 255, 0.75);
+        }
+      }
+
+      /* 触摸手势交给 JS（TrackballControls）处理，浏览器不再响应滚动 / 双击缩放 */
+      #container,
+      #container .element {
+        touch-action: none;
       }
 
       /* 放射性元素：左上角三角标记 + 红色虚线描边 */
@@ -398,20 +407,83 @@
         pointer-events: none;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       }
+
+      /* 触屏操作提示（仅手机端显示，与 .help-mouse 互斥） */
+      .help-touch {
+        display: none;
+      }
+
+      /* ===== 手机 / 窄屏适配 ===== */
+      @media (max-width: 700px) {
+        #info {
+          font-size: 11px;
+          padding: 6px 8px;
+        }
+
+        .help-mouse {
+          display: none;
+        }
+
+        .help-touch {
+          display: inline;
+        }
+
+        /* 图例默认折叠成小标签，点标题展开，避免挡住周期表主体 */
+        #legend {
+          top: 40px;
+          transform: none;
+          left: 10px;
+          max-width: 150px;
+          font-size: 11px;
+          padding: 6px 10px;
+          background: rgba(0, 0, 0, 0.55);
+          pointer-events: auto;
+        }
+
+        #legend .legend-title {
+          cursor: pointer;
+        }
+
+        #legend .legend-title::after {
+          content: " ▾";
+          color: rgba(127, 255, 255, 0.7);
+        }
+
+        #legend.open .legend-title::after {
+          content: " ▴";
+        }
+
+        #legend:not(.open) .legend-items,
+        #legend:not(.open) .legend-radio,
+        #legend:not(.open) .legend-updated {
+          display: none;
+        }
+
+        #menu button {
+          padding: 5px 8px;
+          margin: 0 2px;
+          font-size: 12px;
+        }
+
+        #hint {
+          bottom: 56px;
+          font-size: 11px;
+        }
+      }
     </style>
   </head>
   <body>
     <div id="container"></div>
     <div id="info">
       <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> 3D 渲染 ·
-      元素周期表（左键拖拽旋转 · 滚轮缩放 · 右键拖拽平移，若装有鼠标手势插件可能拦截右键）
+      元素周期表<span class="help-mouse">（左键拖拽旋转 · 滚轮缩放 · 右键拖拽平移，若装有鼠标手势插件可能拦截右键）</span><span class="help-touch">（单指拖拽旋转 · 双指缩放/平移 · 双击卡片查看详情）</span>
     </div>
     <div id="hint">双击元素卡片查看详细介绍</div>
 
     <!-- 图例：分类配色 + 放射性标记说明 -->
     <div id="legend">
-      <div class="legend-title">分类图例</div>
-      <div class="legend-items">
+      <div class="legend-title" tabindex="0" role="button" aria-expanded="false" aria-controls="legend-items">分类图例</div>
+      <div class="legend-items" id="legend-items">
         <span class="legend-item" style="--c:#e04038">碱金属</span>
         <span class="legend-item" style="--c:#e8821e">碱土金属</span>
         <span class="legend-item" style="--c:#3a6fd8">过渡金属</span>
