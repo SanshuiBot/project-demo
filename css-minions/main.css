@@ -422,11 +422,3 @@ div {
 .minion-3 .glasses.right-glasses {
   display: none;
 }
-
-/* 系统开启“减弱动态效果”时停掉循环动画 */
-@media (prefers-reduced-motion: reduce) {
-  .minion .glasses .eye .ball,
-  .minion .mouth {
-    animation: none;
-  }
-}
