@@ -1,83 +1,32 @@
-/* 纯 CSS3 小黄人样式（原 main.less 混入产物已并入整理，本文件为唯一样式源） */
-
-@-webkit-keyframes eye {
-
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-
-  50% {
-    -webkit-transform: translate(70px, 0px);
-            transform: translate(70px, 0px);
-  }
-
-  100% {
-    -webkit-transform: translate(0px, 0px);
-            transform: translate(0px, 0px);
-  }
-
-}
+/* 纯 CSS3 小黄人样式（本文件为唯一样式源）
+ * 四个变体共用 .minion 结构样式，仅以 .minion-N 覆盖体型尺寸与单/双眼差异。
+ */
 
 @keyframes eye {
-
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
-
   50% {
-    -webkit-transform: translate(70px, 0px);
-            transform: translate(70px, 0px);
+    transform: translate(70px, 0px);
   }
-
   100% {
-    -webkit-transform: translate(0px, 0px);
-            transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
   }
-
-}
-
-@-webkit-keyframes up-down {
-
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-
-  50% {
-    -webkit-transform: translate(0, 2px);
-            transform: translate(0, 2px);
-  }
-
-  100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
-  }
-
 }
 
 @keyframes up-down {
-
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
-
   50% {
-    -webkit-transform: translate(0, 2px);
-            transform: translate(0, 2px);
+    transform: translate(0, 2px);
   }
-
   100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
+    transform: translate(0, 0);
   }
-
 }
 
 body {
-
   /* 弹性布局让舞台主体水平垂直居中；内容高于视口时容器自动撑开，避免顶部被裁切 */
   display: flex;
   align-items: center;
@@ -109,90 +58,54 @@ body {
 }
 
 div {
-
   margin: 0;
   padding: 0;
 }
 
-.minion-1 {
-
-  width: 380px;
-  height: 700px;
-  margin-top: -57.5px; /* 原绝对定位的净垂直偏移（top 50 - 107.5），保持脚线对齐 */
-  -webkit-transform: scale(0.5, 0.5);
-      -ms-transform: scale(0.5, 0.5);
-          transform: scale(0.5, 0.5);
+/* ===== 四个变体共用的结构样式 ===== */
+.minion {
+  position: relative;
+  transform: scale(0.5, 0.5);
 }
 
-.minion-1 .hairs,
-.minion-2 .hairs,
-.minion-3 .hairs,
-.minion-4 .hairs {
-
+.minion .hairs {
   position: absolute;
   top: -40px;
   z-index: 3;
   width: 100%;
 }
 
-.minion-1 .hairs .hair1,
-.minion-2 .hairs .hair1,
-.minion-3 .hairs .hair1,
-.minion-4 .hairs .hair1 {
-
+.minion .hairs .hair1,
+.minion .hairs .hair2,
+.minion .hairs .hair3 {
   background: #000;
   width: 2px;
   height: 70px;
   position: absolute;
-  left: 45%;
-  -webkit-transform: rotate(-20deg);
-      -ms-transform: rotate(-20deg);
-          transform: rotate(-20deg);
 }
 
-.minion-1 .hairs .hair2,
-.minion-2 .hairs .hair2,
-.minion-3 .hairs .hair2,
-.minion-4 .hairs .hair2 {
+.minion .hairs .hair1 {
+  left: 45%;
+  transform: rotate(-20deg);
+}
 
-  background: #000;
-  width: 2px;
-  height: 70px;
-  position: absolute;
+.minion .hairs .hair2 {
   left: 50%;
 }
 
-.minion-1 .hairs .hair3,
-.minion-2 .hairs .hair3,
-.minion-3 .hairs .hair3,
-.minion-4 .hairs .hair3 {
-
-  background: #000;
-  width: 2px;
-  height: 70px;
-  position: absolute;
+.minion .hairs .hair3 {
   left: 55%;
-  -webkit-transform: rotate(20deg);
-      -ms-transform: rotate(20deg);
-          transform: rotate(20deg);
+  transform: rotate(20deg);
 }
 
-.minion-1 .body {
-
+.minion .body {
   overflow: hidden;
   background: #fff500;
-  width: 380px;
   position: absolute;
   z-index: 1;
-  height: 700px;
-  border-radius: 180px;
 }
 
-.minion-1 .glasses-type,
-.minion-2 .glasses-type,
-.minion-3 .glasses-type,
-.minion-4 .glasses-type {
-
+.minion .glasses-type {
   height: 52px;
   background: #1f1a17;
   width: 100%;
@@ -201,11 +114,7 @@ div {
   z-index: 1;
 }
 
-.minion-1 .glasses,
-.minion-2 .glasses,
-.minion-3 .glasses,
-.minion-4 .glasses {
-
+.minion .glasses {
   z-index: 2;
   position: absolute;
   background: #dededd;
@@ -216,37 +125,15 @@ div {
   top: 140px;
 }
 
-.minion-1 .glasses.left-glasses,
-.minion-4 .glasses.left-glasses {
-
+.minion .glasses.left-glasses {
   left: 8%;
 }
 
-.minion-1 .glasses.left-glasses .ball,
-.minion-4 .glasses.left-glasses .ball {
-
-  -webkit-animation: eye 1.5s infinite ease;
-          animation: eye 1.5s infinite ease;
-}
-
-.minion-1 .glasses.right-glasses,
-.minion-4 .glasses.right-glasses {
-
+.minion .glasses.right-glasses {
   right: 8%;
 }
 
-.minion-1 .glasses.right-glasses .ball,
-.minion-4 .glasses.right-glasses .ball {
-
-  -webkit-animation: eye 1.5s infinite ease;
-          animation: eye 1.5s infinite ease;
-}
-
-.minion-1 .glasses .eye,
-.minion-2 .glasses .eye,
-.minion-3 .glasses .eye,
-.minion-4 .glasses .eye {
-
+.minion .glasses .eye {
   background: #fff;
   width: 120px;
   height: 120px;
@@ -256,11 +143,7 @@ div {
   position: relative;
 }
 
-.minion-1 .glasses .eye .ball,
-.minion-2 .glasses .eye .ball,
-.minion-3 .glasses .eye .ball,
-.minion-4 .glasses .eye .ball {
-
+.minion .glasses .eye .ball {
   background: #8f5444;
   width: 40px;
   height: 40px;
@@ -268,15 +151,11 @@ div {
   border: 2px solid #1f1a17;
   position: absolute;
   top: 40%;
-  -webkit-transition: all .15s linear;
-          transition: all .15s linear;
+  transition: all 0.15s linear;
+  animation: eye 1.5s infinite ease;
 }
 
-.minion-1 .glasses .eye .ball strong,
-.minion-2 .glasses .eye .ball strong,
-.minion-3 .glasses .eye .ball strong,
-.minion-4 .glasses .eye .ball strong {
-
+.minion .glasses .eye .ball strong {
   display: block;
   width: 20px;
   height: 20px;
@@ -287,11 +166,7 @@ div {
   left: 10px;
 }
 
-.minion-1 .mouth,
-.minion-2 .mouth,
-.minion-3 .mouth,
-.minion-4 .mouth {
-
+.minion .mouth {
   width: 40%;
   height: 80px;
   background: #fff;
@@ -302,62 +177,38 @@ div {
   border-radius: 120px 120px 40px 40px;
   border: 2px solid #1f1a17;
   overflow: hidden;
-  -webkit-animation: up-down 0.5s infinite ease;
-          animation: up-down 0.5s infinite ease;
+  animation: up-down 0.5s infinite ease;
 }
 
-.minion-1 .mouth .tooths .tooth1,
-.minion-2 .mouth .tooths .tooth1,
-.minion-3 .mouth .tooths .tooth1,
-.minion-4 .mouth .tooths .tooth1 {
-
+.minion .mouth .tooths .tooth1,
+.minion .mouth .tooths .tooth2,
+.minion .mouth .tooths .tooth3 {
   border-right: 2px solid #1f1a17;
   height: 100%;
   width: 0;
   position: absolute;
+}
+
+.minion .mouth .tooths .tooth1 {
   left: 25%;
 }
 
-.minion-1 .mouth .tooths .tooth2,
-.minion-2 .mouth .tooths .tooth2,
-.minion-3 .mouth .tooths .tooth2,
-.minion-4 .mouth .tooths .tooth2 {
-
-  border-right: 2px solid #1f1a17;
-  height: 100%;
-  width: 0;
-  position: absolute;
+.minion .mouth .tooths .tooth2 {
   left: 50%;
 }
 
-.minion-1 .mouth .tooths .tooth3,
-.minion-2 .mouth .tooths .tooth3,
-.minion-3 .mouth .tooths .tooth3,
-.minion-4 .mouth .tooths .tooth3 {
-
-  border-right: 2px solid #1f1a17;
-  height: 100%;
-  width: 0;
-  position: absolute;
+.minion .mouth .tooths .tooth3 {
   left: 75%;
 }
 
-.minion-1 .mouth .tooths .line,
-.minion-2 .mouth .tooths .line,
-.minion-3 .mouth .tooths .line,
-.minion-4 .mouth .tooths .line {
-
+.minion .mouth .tooths .line {
   width: 100%;
   top: 48%;
   border-top: 3px solid #1f1a17;
   position: absolute;
 }
 
-.minion-1 .arm,
-.minion-2 .arm,
-.minion-3 .arm,
-.minion-4 .arm {
-
+.minion .arm {
   position: absolute;
   width: 50px;
   height: 400px;
@@ -367,33 +218,17 @@ div {
   z-index: 0;
 }
 
-.minion-1 .arm.left-arm,
-.minion-2 .arm.left-arm,
-.minion-3 .arm.left-arm,
-.minion-4 .arm.left-arm {
-
+.minion .arm.left-arm {
   left: -20px;
-  -webkit-transform: rotate(20deg);
-      -ms-transform: rotate(20deg);
-          transform: rotate(20deg);
+  transform: rotate(20deg);
 }
 
-.minion-1 .arm.right-arm,
-.minion-2 .arm.right-arm,
-.minion-3 .arm.right-arm,
-.minion-4 .arm.right-arm {
-
+.minion .arm.right-arm {
   right: -20px;
-  -webkit-transform: rotate(-20deg);
-      -ms-transform: rotate(-20deg);
-          transform: rotate(-20deg);
+  transform: rotate(-20deg);
 }
 
-.minion-1 .arm .hand,
-.minion-2 .arm .hand,
-.minion-3 .arm .hand,
-.minion-4 .arm .hand {
-
+.minion .arm .hand {
   position: absolute;
   bottom: 0;
   width: 60px;
@@ -403,11 +238,7 @@ div {
   left: -5px;
 }
 
-.minion-1 .cloth,
-.minion-2 .cloth,
-.minion-3 .cloth,
-.minion-4 .cloth {
-
+.minion .cloth {
   background: #667ab3;
   border-radius: 20px;
   bottom: 20px;
@@ -418,11 +249,7 @@ div {
   left: 10%;
 }
 
-.minion-1 .pocket,
-.minion-2 .pocket,
-.minion-3 .pocket,
-.minion-4 .pocket {
-
+.minion .pocket {
   border: 2px solid #1f1a17;
   border-radius: 5px 5px 30px 30px;
   width: 100px;
@@ -434,11 +261,7 @@ div {
   bottom: 80px;
 }
 
-.minion-1 .pocket > div,
-.minion-2 .pocket > div,
-.minion-3 .pocket > div,
-.minion-4 .pocket > div {
-
+.minion .pocket > div {
   background: #1f1a17;
   width: 50px;
   height: 50px;
@@ -448,27 +271,17 @@ div {
   position: absolute;
 }
 
-.minion-1 .pocket > div > div,
-.minion-2 .pocket > div > div,
-.minion-3 .pocket > div > div,
-.minion-4 .pocket > div > div {
-
+.minion .pocket > div > div {
   width: 20px;
   height: 20px;
   border: 5px solid #667ab3;
-  -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
+  transform: rotate(45deg);
   position: absolute;
   top: 10px;
   left: 10px;
 }
 
-.minion-1 .trousers,
-.minion-2 .trousers,
-.minion-3 .trousers,
-.minion-4 .trousers {
-
+.minion .trousers {
   background: #667ab3;
   border-radius: 10px 10px 130px 130px;
   bottom: 0;
@@ -478,11 +291,7 @@ div {
   z-index: 1;
 }
 
-.minion-1 .straps,
-.minion-2 .straps,
-.minion-3 .straps,
-.minion-4 .straps {
-
+.minion .straps {
   width: 40px;
   height: 150px;
   position: absolute;
@@ -491,33 +300,17 @@ div {
   bottom: 230px;
 }
 
-.minion-1 .straps.left-straps,
-.minion-2 .straps.left-straps,
-.minion-3 .straps.left-straps,
-.minion-4 .straps.left-straps {
-
+.minion .straps.left-straps {
   left: 10px;
-  -webkit-transform: rotate(-40deg);
-      -ms-transform: rotate(-40deg);
-          transform: rotate(-40deg);
+  transform: rotate(-40deg);
 }
 
-.minion-1 .straps.right-straps,
-.minion-2 .straps.right-straps,
-.minion-3 .straps.right-straps,
-.minion-4 .straps.right-straps {
-
+.minion .straps.right-straps {
   right: 10px;
-  -webkit-transform: rotate(40deg);
-      -ms-transform: rotate(40deg);
-          transform: rotate(40deg);
+  transform: rotate(40deg);
 }
 
-.minion-1 .straps .fastener,
-.minion-2 .straps .fastener,
-.minion-3 .straps .fastener,
-.minion-4 .straps .fastener {
-
+.minion .straps .fastener {
   background: #1f1a17;
   width: 20px;
   height: 20px;
@@ -527,11 +320,7 @@ div {
   left: 10px;
 }
 
-.minion-1 .leg,
-.minion-2 .leg,
-.minion-3 .leg,
-.minion-4 .leg {
-
+.minion .leg {
   background: #667ab3;
   width: 70px;
   height: 120px;
@@ -539,45 +328,15 @@ div {
   bottom: -80px;
 }
 
-.minion-1 .leg.left-leg,
-.minion-2 .leg.left-leg,
-.minion-3 .leg.left-leg,
-.minion-4 .leg.left-leg {
-
+.minion .leg.left-leg {
   left: 20%;
 }
 
-.minion-1 .leg.left-leg .footer,
-.minion-2 .leg.left-leg .footer,
-.minion-3 .leg.left-leg .footer,
-.minion-4 .leg.left-leg .footer {
-
-  right: -2px;
-  border-radius: 100px 0 0 20px;
-}
-
-.minion-1 .leg.right-leg,
-.minion-2 .leg.right-leg,
-.minion-3 .leg.right-leg,
-.minion-4 .leg.right-leg {
-
+.minion .leg.right-leg {
   right: 20%;
 }
 
-.minion-1 .leg.right-leg .footer,
-.minion-2 .leg.right-leg .footer,
-.minion-3 .leg.right-leg .footer,
-.minion-4 .leg.right-leg .footer {
-
-  left: -2px;
-  border-radius: 0 100px 20px 0;
-}
-
-.minion-1 .leg .footer,
-.minion-2 .leg .footer,
-.minion-3 .leg .footer,
-.minion-4 .leg .footer {
-
+.minion .leg .footer {
   background: #1f1a17;
   width: 100px;
   height: 50px;
@@ -585,30 +344,68 @@ div {
   bottom: 0;
 }
 
-.minion-2 {
+.minion .leg.left-leg .footer {
+  right: -2px;
+  border-radius: 100px 0 0 20px;
+}
 
+.minion .leg.right-leg .footer {
+  left: -2px;
+  border-radius: 0 100px 20px 0;
+}
+
+/* ===== 变体差异：体型尺寸与脚线对齐偏移 ===== */
+.minion-1 {
+  width: 380px;
+  height: 700px;
+  margin-top: -57.5px; /* 原绝对定位的净垂直偏移（top 50 - 107.5），保持脚线对齐 */
+}
+
+.minion-1 .body {
+  width: 380px;
+  height: 700px;
+  border-radius: 180px;
+}
+
+.minion-2 {
   width: 334.4px;
   height: 770px;
   margin-top: -107.5px;
-  -webkit-transform: scale(0.5, 0.5);
-      -ms-transform: scale(0.5, 0.5);
-          transform: scale(0.5, 0.5);
 }
 
 .minion-2 .body {
-
-  overflow: hidden;
-  background: #fff500;
   width: 334.4px;
-  position: absolute;
-  z-index: 1;
   height: 770px;
   border-radius: 158.4px;
 }
 
+.minion-3 {
+  width: 437px;
+  height: 714px;
+  margin-top: -63.5px; /* 原绝对定位的净垂直偏移（top 44 - 107.5），保持脚线对齐 */
+}
+
+.minion-3 .body {
+  width: 437px;
+  height: 714px;
+  border-radius: 207px;
+}
+
+.minion-4 {
+  width: 380px;
+  height: 770px;
+  margin-top: -102.5px; /* 原绝对定位的净垂直偏移（top 5 - 107.5），保持脚线对齐 */
+}
+
+.minion-4 .body {
+  width: 380px;
+  height: 770px;
+  border-radius: 180px;
+}
+
+/* 独眼变体：左侧镜片放大居中，右侧镜片隐藏 */
 .minion-2 .glasses.left-glasses,
 .minion-3 .glasses.left-glasses {
-
   left: 50%;
   margin-left: -90px;
   width: 180px;
@@ -617,62 +414,19 @@ div {
 
 .minion-2 .glasses.left-glasses .eye,
 .minion-3 .glasses.left-glasses .eye {
-
   width: 150px;
   height: 150px;
 }
 
-.minion-2 .glasses.left-glasses .eye .ball,
-.minion-3 .glasses.left-glasses .eye .ball {
-
-  -webkit-animation: eye 1.5s infinite ease;
-          animation: eye 1.5s infinite ease;
-}
-
 .minion-2 .glasses.right-glasses,
 .minion-3 .glasses.right-glasses {
-
   display: none;
 }
 
-.minion-3 {
-
-  width: 437px;
-  height: 714px;
-  margin-top: -63.5px; /* 原绝对定位的净垂直偏移（top 44 - 107.5），保持脚线对齐 */
-  -webkit-transform: scale(0.5, 0.5);
-      -ms-transform: scale(0.5, 0.5);
-          transform: scale(0.5, 0.5);
-}
-
-.minion-3 .body {
-
-  overflow: hidden;
-  background: #fff500;
-  width: 437px;
-  position: absolute;
-  z-index: 1;
-  height: 714px;
-  border-radius: 207px;
-}
-
-.minion-4 {
-
-  width: 380px;
-  height: 770px;
-  margin-top: -102.5px; /* 原绝对定位的净垂直偏移（top 5 - 107.5），保持脚线对齐 */
-  -webkit-transform: scale(0.5, 0.5);
-      -ms-transform: scale(0.5, 0.5);
-          transform: scale(0.5, 0.5);
-}
-
-.minion-4 .body {
-
-  overflow: hidden;
-  background: #fff500;
-  width: 380px;
-  position: absolute;
-  z-index: 1;
-  height: 770px;
-  border-radius: 180px;
+/* 系统开启“减弱动态效果”时停掉循环动画 */
+@media (prefers-reduced-motion: reduce) {
+  .minion .glasses .eye .ball,
+  .minion .mouth {
+    animation: none;
+  }
 }

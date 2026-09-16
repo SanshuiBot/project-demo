@@ -1,4 +1,4 @@
-# demoProject —— 前端趣味实验室
+# 前端趣味实验室
 
 一个纯前端趣味 demo 合集：**爱心树表白 / 纯 CSS3 小黄人 / 3D 元素周期表**。
 
@@ -7,19 +7,23 @@
 
 ## 作品一览
 
-| 入口 | Demo | 说明 | 在线预览 |
-| --- | --- | --- | --- |
-| 首页 | 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [立即打开](https://SanshuiBot.github.io/project-demo/) |
-| love-tree | 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [立即打开](https://SanshuiBot.github.io/project-demo/love-tree/index.html) |
-| css-minions | 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [立即打开](https://SanshuiBot.github.io/project-demo/css-minions/index.html) |
-| periodic-table-3d | 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [立即打开](https://SanshuiBot.github.io/project-demo/periodic-table-3d/index.html) |
+各 demo 入口统一为各自目录下的 `index.html`；首页跳转全部使用相对路径，部署到任意子路径（如 `/project-demo/`）都能正确工作。下表以 `<user>` 代替 GitHub 用户名：
+
+| Demo | 说明 | 在线预览 |
+| --- | --- | --- |
+| 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [打开](https://<user>.github.io/project-demo/) |
+| 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [打开](https://<user>.github.io/project-demo/love-tree/) |
+| 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [打开](https://<user>.github.io/project-demo/css-minions/) |
+| 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [打开](https://<user>.github.io/project-demo/periodic-table-3d/) |
+
+> 本仓库实际部署于 `https://SanshuiBot.github.io/project-demo/`。
 
 ## 项目特性
 
 - 🧱 **零依赖纯静态**：全部为本地资源，无任何外网请求；克隆后直接双击 `index.html` 即可运行；
 - 🏠 **自带导航首页**：根目录 `index.html` 汇总三件作品，深色玻璃拟态 + 主题配色，移动端自适应；
 - 🎨 **主题丰富**：Canvas 动画、纯 CSS3 造型、three.js CSS3D 各占一席，风格互不重复；
-- ♿ **细节考究**：`prefers-reduced-motion` 减弱动态效果支持、窄屏适配、性能优化（后台自动暂停渲染等）。
+- ♿ **细节考究**：`prefers-reduced-motion` 减弱动态效果支持、窄屏适配、性能优化（后台自动暂停渲染、脚本后置不阻塞首屏、音频按需加载等）。
 
 ## 快速开始
 
@@ -34,38 +38,23 @@ python -m http.server 8080
 #                 http://localhost:8080/love-tree/ 等 → 各 demo
 ```
 
-> 提示：三个 demo 的入口均已统一为各自目录下的 `index.html`；仓库根目录的 `index.html` 是导航首页。
-> 首页里的跳转全部使用相对路径，无论双击打开还是部署到子路径（如 `/project-demo/`）都能正确工作。
-
 ## 部署到 GitHub Pages
 
-本仓库**没有构建步骤**，源码即产物，因此最简单可靠的方式是**从分支部署**（Deploy from a branch），无需任何 CI 配置。
+本仓库**没有构建步骤**，源码即产物，因此最简单可靠的方式是**从分支部署**（Deploy from a branch），无需任何 CI 配置：
 
-### 方式 A：分支部署（推荐）
-
-1. 推送代码到 GitHub 仓库（如 `SanshuiBot/project-demo`）；
+1. 推送代码到 GitHub 仓库；
 2. 打开仓库 **Settings → Pages**；
 3. 在 **Build and deployment** 区域，把 **Source** 选为 **"Deploy from a branch"**；
 4. **Branch** 选择 `main`，目录选 **`/`（root）**，点击 **Save**；
-5. 等待约 1 分钟（Actions 会自动跑一次），即可访问：
-   `https://SanshuiBot.github.io/project-demo/`
+5. 等待约 1 分钟，即可访问「作品一览」表中的地址；之后每次 push 到 `main` 都会自动重新部署。
 
-访问路径与仓库名一致，均为相对路径友好设计：
+> 若仓库是私有的，免费版需先公开仓库才能开启 Pages 服务。
 
-| 页面 | 地址 |
-| --- | --- |
-| 导航首页 | `https://<user>.github.io/project-demo/` |
-| 爱心树表白 | `https://<user>.github.io/project-demo/love-tree/` |
-| 小黄人 | `https://<user>.github.io/project-demo/css-minions/index.html` |
-| 3D 周期表 | `https://<user>.github.io/project-demo/periodic-table-3d/` |
-
-> 如果仓库是私有的，请先在 **Settings → Pages** 开启 Pages 服务（免费版需公开仓库）；
-> 之后每次 push 到 `main`，GitHub 都会自动重新部署，无需手动操作。
-
-### 方式 B：GitHub Actions 部署（可选）
+<details>
+<summary>备选：GitHub Actions 部署（引入构建步骤后再用）</summary>
 
 若将来引入需要构建的框架（Vite 等），再把 Pages 的 Source 切到 **"GitHub Actions"**，
-并在仓库新增 `.github/workflows/deploy.yml` 即可——构建全部在云端完成，本地依然只需 push：
+并在仓库新增 `.github/workflows/deploy.yml`——构建全部在云端完成，本地依然只需 push：
 
 ```yaml
 name: Deploy to GitHub Pages
@@ -89,15 +78,9 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-两种方式的对比：
+分支部署适合纯静态、无构建的场景（配置成本最低，覆盖式发布）；Actions 部署适合有构建步骤 / 需要部署留痕与回滚的场景。**当前建议**：直接用分支部署；哪天引入打包构建再切 Actions，并把 `path: .` 改成 `dist` 等构建产物目录。
 
-| 维度 | 分支部署 | GitHub Actions |
-| --- | --- | --- |
-| 适用场景 | 纯静态、无构建 | 需要构建步骤 / 自定义流程 |
-| 配置成本 | Settings 里点两下 | 需写 workflow 文件 |
-| 部署历史 | 覆盖式 | 每次部署留痕、可回滚 |
-
-**当前建议**：项目是纯静态零依赖，直接用**方式 A** 即可；哪天引入打包构建再切方式 B，并把 `path: .` 改成 `dist` 等构建产物目录。
+</details>
 
 ---
 
@@ -112,7 +95,7 @@ jobs:
 - 🌳 **Canvas 动画**：贝塞尔曲线树枝生长、700 个花瓣缓放与飘落，全部由 `love.js` 绘制引擎完成；
 - ⌨️ **打字机情书**：逐字打印表白文案（自动跳过 HTML 标签，光标闪烁）；
 - ⏱️ **相恋计时器**：实时刷新“第 N 天 N 小时 N 分 N 秒”；
-- 🎵 **背景音乐**：右下角悬浮按钮可播放/暂停（`assets/bgm.mp3`，受浏览器自动播放策略限制，首次点击页面后自动开播）；
+- 🎵 **背景音乐**：右下角悬浮按钮可播放/暂停；受浏览器自动播放策略限制，首次点击页面后自动开播（音频文件按需加载，不在首屏下载）；
 - 📱 **响应式缩放**：以 1100px 设计稿为准，窄屏自动等比缩放居中；
 - ♿ **兼容检测**：不支持 Canvas 时优雅提示更换现代浏览器。
 
@@ -141,7 +124,7 @@ love-tree/
 
 > 不借助任何图片与脚本，仅用 DIV + CSS3 绘制出会眨眼、嘴巴张合的小黄人军团。
 
-四个小黄人排成一排（整体横向可排布至约 1400px+ 宽），每个都有独立的循环动画：**眼球左右张望、嘴巴上下开合**。
+四个小黄人排成一排（整体横向约 1531px 布局宽，窄屏按比例整体缩放），每个都有独立的循环动画：**眼球左右张望、嘴巴上下开合**。
 
 ### 四个变体
 | 类名 | 体型 | 眼睛 |
@@ -151,21 +134,17 @@ love-tree/
 | `.minion-3` | 矮胖（1.15 × 1.02） | 单眼 |
 | `.minion-4` | 高个（1.0 × 1.1） | 双眼 |
 
-> 页面 HTML 中的 `<!-- 注释 -->` 说明了各变体差异；单/双眼与体型由四个 `.minion-N` 变体的宽高尺寸区分。
-
 ### 技术要点
 - **CSS3 造型**：圆角、边框、`z-index` 分层堆叠出头发、护目镜、嘴巴、背带裤、口袋等全部细节；
+- **样式组织**：四个变体共用的结构样式统一在 `.minion` 下，`.minion-N` 只覆盖体型尺寸与单/双眼差异；
 - **关键帧动画**：`eye`（眼球横移）与 `up-down`（嘴巴张合）两个无限循环动画；
 - **可访问性**：系统开启“减弱动态效果”（`prefers-reduced-motion`）时自动停掉循环动画；
-- **窄屏适配**：舞台（`.stage`）支持横向滚动浏览，手机也能看完整支队伍。
-
-### 修改样式
-样式统一维护在 `css-minions/main.css`（曾由 LESS 混入 `main.less` 编译而来，该文件已移除）。直接编辑 `main.css` 即可，无需任何编译步骤。
+- **窄屏适配**：窄屏下舞台按布局宽度整体等比缩放居中，手机也能看完整支队伍。
 
 ```
 css-minions/
-├── index.html     # 页面（四个小黄人的 DOM 结构）
-└── main.css       # 样式文件（页面实际加载，直接编辑）
+├── index.html     # 页面（四个小黄人的 DOM 结构 + 缩放脚本）
+└── main.css       # 样式文件（唯一样式源，直接编辑，无需编译）
 ```
 
 ---
@@ -184,14 +163,14 @@ css-minions/
 - **布局算法**：表格按族/周期排布；球面采用斐波那契螺旋均匀采样；螺旋与网格为经典参数方程；
 - **补间动画**：基于 tween 的指数缓动（`Exponential.InOut`），切换布局时随机错峰、平滑归位；
 - **性能细节**：页面切到后台自动暂停渲染循环（`visibilitychange`），释放 CPU；
-- 数据含全部 118 个元素（符号 / 英文名 / 相对原子质量 / 族 / 周期），修正了英文名笔误（Einstenium → Einsteinium）与残缺质量值。
+- **元素数据**：含全部 118 个元素（符号 / 英文名 / 相对原子质量 / 族 / 周期），采用 2016 年 IUPAC 正式命名（Nh / Mc / Ts / Og）。
 
 ### 结构说明
 ```
 periodic-table-3d/
 ├── index.html        # 页面 + 样式 + 布局菜单
 └── js/
-    ├── main.js              # 主控逻辑与元素数据（新增，原内联于 HTML）
+    ├── main.js              # 主控逻辑与元素数据
     ├── three.min.js         # three.js（本地依赖）
     ├── tween.min.js         # tween 补间库（本地依赖）
     ├── TrackballControls.js # 轨道控制（拖拽/缩放，本地依赖）
@@ -205,15 +184,9 @@ periodic-table-3d/
 
 ## 开发与维护约定
 
-- **保持零依赖**：仓库刻意不引入 npm / 构建工具 / 工具链。曾引入的 ESLint + Prettier 已移除——
-  对纯静态页面价值有限，反而增加 `node_modules` 体积与克隆负担。改动代码后无需 `npm install` / `lint`，刷新浏览器即可验证；
+- **保持零依赖**：仓库刻意不引入 npm / 构建工具 / 工具链。对纯静态页面，npm 工具链价值有限，反而增加 `node_modules` 体积与克隆负担。改动代码后刷新浏览器即可验证；
 - **代码风格**：沿用各文件现有缩进（2 空格）与注释密度；新代码保持无外部请求、可离线运行；
 - **提交信息**：遵循 Conventional Commits（如 `feat:` / `fix:` / `chore:`）。
-
-## 近期更新
-
-- 🏠 新增根目录导航首页 `index.html`（玻璃拟态卡片 + 主题配色 + 移动端适配），README 同步补充部署说明；
-- 🧹 移除 ESLint / Prettier / `package.json` 等 npm 工具链，回归纯静态零依赖。
 
 ## 目录一览
 
