@@ -71,6 +71,17 @@
         user-select: none;
         position: relative;
         backface-visibility: hidden; /* 背面不绘制，降低 3D 旋转时的合成开销 */
+        will-change: transform; /* 提前提升为合成层，避免动画中图层树反复重建 */
+      }
+
+      /* 首屏聚拢动画期间（main.js 给 #container 加 .intro）：暂时剥离辉光阴影。
+         模糊阴影是 CSS3D 图层重光栅化最贵的部分，动画期间去掉、结束后恢复，最终观感不变 */
+      .intro .element {
+        box-shadow: none;
+      }
+
+      .intro .element .symbol {
+        text-shadow: none;
       }
 
       .element:hover {
@@ -273,7 +284,21 @@
         margin-right: 6px;
       }
 
-      .detail-card .d-desc {
+      /* 简介与用途两段：小标题 + 正文 */
+      .detail-card .d-section {
+        margin-bottom: 12px;
+      }
+
+      .detail-card .d-label {
+        font-size: 11px;
+        font-weight: bold;
+        color: rgba(127, 255, 255, 0.6);
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      .detail-card .d-desc,
+      .detail-card .d-use {
         font-size: 14px;
         line-height: 1.9;
         color: rgba(232, 247, 247, 0.9);
@@ -351,6 +376,15 @@
         outline-offset: -1px;
       }
 
+      #legend .legend-updated {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
       /* 双击提示 */
       #hint {
         position: absolute;
@@ -367,11 +401,6 @@
     </style>
   </head>
   <body>
-    <script src="js/three.min.js"></script>
-    <script src="js/tween.min.js"></script>
-    <script src="js/TrackballControls.js"></script>
-    <script src="js/CSS3DRenderer.js"></script>
-
     <div id="container"></div>
     <div id="info">
       <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> 3D 渲染 ·
@@ -395,6 +424,7 @@
         <span class="legend-item" style="--c:#54258c">锕系</span>
       </div>
       <div class="legend-radio"><span class="radio-swatch"></span>放射性元素（红色角标 + 虚线描边）</div>
+      <div class="legend-updated">数据更新：<span id="data-updated"></span></div>
     </div>
 
     <!-- 元素详情面板：内容由 JS 填充 -->
@@ -416,8 +446,19 @@
           <div><span class="label">元素分类</span><span class="v-cat"></span></div>
           <div><span class="label">常温状态</span><span class="v-state"></span></div>
           <div><span class="label">所在区</span><span class="v-block"></span></div>
+          <div><span class="label">发现</span><span class="v-disc"></span></div>
+          <div><span class="label">熔点（℃）</span><span class="v-mp"></span></div>
+          <div><span class="label">沸点（℃）</span><span class="v-bp"></span></div>
+          <div><span class="label">密度（g/cm³）</span><span class="v-den"></span></div>
         </div>
-        <div class="d-desc"></div>
+        <div class="d-section">
+          <div class="d-label">元素简介</div>
+          <div class="d-desc"></div>
+        </div>
+        <div class="d-section">
+          <div class="d-label">主要用途</div>
+          <div class="d-use"></div>
+        </div>
         <button type="button" class="d-close" title="关闭详情（也可按 Esc 或点击遮罩）">关闭</button>
       </div>
     </div>
@@ -428,6 +469,12 @@
       <button type="button" data-mode="grid" title="切换为网格排列">网格排列</button>
     </div>
 
+    <!-- 脚本统一放 body 末尾：DOM 先解析渲染，库脚本不阻塞首屏；加载顺序不可变（main.js 依赖前面的全局） -->
+    <script src="js/three.min.js"></script>
+    <script src="js/tween.min.js"></script>
+    <script src="js/TrackballControls.js"></script>
+    <script src="js/CSS3DRenderer.js"></script>
+    <script src="js/element-data.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
