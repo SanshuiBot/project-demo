@@ -31,7 +31,7 @@
 # 方式一：直接双击仓库根目录的 index.html（会打开导航首页，可点进各 demo）
 # 方式二：本地起一个静态服务（推荐，可完整体验音频等资源加载）
 cd project-demo
-python -m http.server 8080
+python -m http.server 8080 --bind 127.0.0.1
 # 浏览器访问 http://localhost:8080/            → 导航首页
 #                 http://localhost:8080/love-tree/ 等 → 各 demo
 ```

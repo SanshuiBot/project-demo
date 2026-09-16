@@ -20,13 +20,17 @@
     el.innerHTML = "";
     var timer = setInterval(function () {
       if (progress >= str.length) {
+        // 结束前先写一次无光标的完整内容，避免奇数长度文案在尾部残留 "_"
+        el.innerHTML = str;
         clearInterval(timer);
         return;
       }
       var cur = str.charAt(progress);
       if (cur === "<") {
-        // 标签一次性跳过，避免动画中出现半个标签
-        progress = str.indexOf(">", progress) + 1;
+        // 标签一次性跳过，避免动画中出现半个标签；
+        // 无闭合 ">" 时跳到串尾，防止 indexOf 为 -1 使进度归零死循环
+        var end = str.indexOf(">", progress);
+        progress = end === -1 ? str.length : end + 1;
       } else {
         progress += 1;
       }

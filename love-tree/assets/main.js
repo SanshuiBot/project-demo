@@ -189,6 +189,10 @@
 
   /** 情书打字机 + 相恋计时（与第四幕并行，永不结束） */
   async function textAnimate() {
+    var code = document.getElementById("code");
+    var clockBox = document.getElementById("clock-box");
+    if (!code || !clockBox) return;
+
     var together = new Date(
       TOGETHER.year,
       TOGETHER.month - 1,
@@ -198,10 +202,9 @@
       TOGETHER.second
     );
 
-    var code = document.getElementById("code");
     code.style.display = "block";
     Confession.typewriter(code);
-    Confession.fadeIn(document.getElementById("clock-box"), 500);
+    Confession.fadeIn(clockBox, 500);
 
     while (true) {
       Confession.timeElapse(together);
@@ -215,31 +218,33 @@
   var MUSIC_ON = "❚❚";
   var MUSIC_OFF = "🎵";
 
-  function reflectMusic() {
-    soundBtn.textContent = bgm.paused ? MUSIC_OFF : MUSIC_ON;
-  }
-
-  soundBtn.addEventListener("click", function () {
-    if (bgm.paused) {
-      bgm.play().catch(function () {});
-    } else {
-      bgm.pause();
+  if (bgm && soundBtn) {
+    function reflectMusic() {
+      soundBtn.textContent = bgm.paused ? MUSIC_OFF : MUSIC_ON;
     }
-    reflectMusic();
-  });
 
-  bgm.addEventListener("ended", reflectMusic);
-
-  // 首次任意点击/触摸时尝试自动播放（满足浏览器自动播放策略）
-  document.addEventListener(
-    "pointerdown",
-    function startBgm() {
-      bgm.play().catch(function () {});
+    soundBtn.addEventListener("click", function () {
+      if (bgm.paused) {
+        bgm.play().catch(function () {});
+      } else {
+        bgm.pause();
+      }
       reflectMusic();
-      document.removeEventListener("pointerdown", startBgm);
-    },
-    { passive: true }
-  );
+    });
+
+    bgm.addEventListener("ended", reflectMusic);
+
+    // 首次任意点击/触摸时尝试自动播放（满足浏览器自动播放策略）
+    document.addEventListener(
+      "pointerdown",
+      function startBgm() {
+        bgm.play().catch(function () {});
+        reflectMusic();
+        document.removeEventListener("pointerdown", startBgm);
+      },
+      { passive: true }
+    );
+  }
 
   /* ================= 启动 ================= */
   Confession.fitStage();
