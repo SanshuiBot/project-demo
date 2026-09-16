@@ -70,7 +70,6 @@
         border-radius: 4px;
         user-select: none;
         position: relative;
-        backface-visibility: hidden; /* 背面不绘制，降低 3D 旋转时的合成开销 */
         will-change: transform; /* 提前提升为合成层，避免动画中图层树反复重建 */
       }
 
