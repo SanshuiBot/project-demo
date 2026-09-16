@@ -7,16 +7,14 @@
 
 ## 作品一览
 
-各 demo 入口统一为各自目录下的 `index.html`；首页跳转全部使用相对路径，部署到任意子路径（如 `/project-demo/`）都能正确工作。下表以 `<user>` 代替 GitHub 用户名：
+各 demo 入口统一为各自目录下的 `index.html`；首页跳转全部使用相对路径，部署到任意子路径（如 `/project-demo/`）都能正确工作：
 
 | Demo | 说明 | 在线预览 |
 | --- | --- | --- |
-| 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [打开](https://<user>.github.io/project-demo/) |
-| 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [打开](https://<user>.github.io/project-demo/love-tree/) |
-| 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [打开](https://<user>.github.io/project-demo/css-minions/) |
-| 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [打开](https://<user>.github.io/project-demo/periodic-table-3d/) |
-
-> 本仓库实际部署于 `https://SanshuiBot.github.io/project-demo/`。
+| 导航首页 | 深色玻璃拟态卡片，汇总跳转三个 demo | [打开](https://sanshuibot.github.io/project-demo/) |
+| 爱心树表白 | Canvas 爱心成长动画 + 打字机情书 + 相恋倒计时 | [打开](https://sanshuibot.github.io/project-demo/love-tree/) |
+| 纯 CSS3 小黄人 | 不依赖任何图片/脚本的 CSS3 动画雕塑军团 | [打开](https://sanshuibot.github.io/project-demo/css-minions/) |
+| 3D 元素周期表 | three.js CSS3D，118 元素 × 4 种 3D 布局 | [打开](https://sanshuibot.github.io/project-demo/periodic-table-3d/) |
 
 ## 项目特性
 
