@@ -19,7 +19,7 @@
       }
 
       body {
-        background-color: #68217a;
+        background-color: #0d1b2a;
         margin: 0;
         font-family: Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
         overflow: hidden;
@@ -62,17 +62,37 @@
       .element {
         width: 120px;
         height: 160px;
+        overflow: hidden;
         box-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
         border: 1px solid rgba(127, 255, 255, 0.25);
         text-align: center;
         cursor: default;
         border-radius: 4px;
         user-select: none;
+        position: relative;
+        backface-visibility: hidden; /* 背面不绘制，降低 3D 旋转时的合成开销 */
       }
 
       .element:hover {
         box-shadow: 0 0 12px rgba(0, 255, 255, 0.75);
         border: 1px solid rgba(127, 255, 255, 0.75);
+      }
+
+      /* 放射性元素：左上角三角标记 + 红色虚线描边 */
+      .element.radioactive::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-style: solid;
+        border-width: 22px 22px 0 0;
+        border-color: #ff4d4d transparent transparent transparent;
+        opacity: 0.85;
+      }
+
+      .element.radioactive {
+        outline: 2px dashed rgba(255, 80, 80, 0.9);
+        outline-offset: -2px;
       }
 
       .element .number {
@@ -85,26 +105,70 @@
 
       .element .symbol {
         position: absolute;
-        top: 40px;
+        top: 34px;
         left: 0;
         right: 0;
-        font-size: 60px;
+        font-size: 52px;
         font-weight: bold;
-        color: rgba(255, 255, 255, 0.75);
+        color: rgba(255, 255, 255, 0.85);
         text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
         line-height: 1;
       }
 
+      /* 卡片底部信息区：固定两行、禁止换行，避免内容向上顶进元素符号区。
+         行高用 px 锁定：无单位行高会被拼音声调字符（如 nǚ）的字体回退撑高，导致各卡片行距不一致 */
       .element .details {
         position: absolute;
-        bottom: 14px;
+        bottom: 10px;
         left: 0;
         right: 0;
-        font-size: 12px;
-        color: rgba(127, 255, 255, 0.75);
-        line-height: 1.5;
-        padding: 0 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 10px;
+        color: rgba(210, 255, 255, 0.85);
+        padding: 0 4px;
         box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .element .details .el-line {
+        line-height: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 100%;
+      }
+
+      .element .details .el-zh {
+        font-size: 12px;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.95);
+      }
+
+      .element .details .el-pinyin {
+        font-size: 10px;
+        margin-left: 3px;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      /* 卡片内状态徽章：液体 / 气体 / 固体 / 放射性 */
+      .element .details .el-state {
+        display: inline-block;
+        margin-left: 4px;
+        padding: 0 5px;
+        border-radius: 8px;
+        font-size: 9px;
+        line-height: 14px;
+        vertical-align: 1px;
+        background: rgba(0, 0, 0, 0.45);
+        color: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(127, 255, 255, 0.3);
+      }
+
+      .element .details .el-state.s-radioactive {
+        color: rgba(255, 150, 150, 0.95);
+        border-color: rgba(255, 80, 80, 0.7);
       }
 
       button {
@@ -180,6 +244,13 @@
       .detail-card .d-title .d-zh {
         font-size: 22px;
         font-weight: bold;
+        margin-bottom: 2px;
+      }
+
+      .detail-card .d-title .d-pinyin {
+        margin-bottom: 2px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
       }
 
       .detail-card .d-title .d-name {
@@ -213,6 +284,73 @@
         width: 100%;
       }
 
+      /* 图例：分类配色 + 放射性标记 */
+      #legend {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.35);
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 12px;
+        max-width: 160px;
+        pointer-events: none;
+      }
+
+      #legend .legend-title {
+        font-weight: bold;
+        color: rgba(127, 255, 255, 0.9);
+        margin-bottom: 8px;
+      }
+
+      #legend .legend-items {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 10px;
+      }
+
+      #legend .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        line-height: 1.3;
+      }
+
+      #legend .legend-item::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        background: var(--c);
+        box-shadow: 0 0 4px var(--c);
+      }
+
+      #legend .legend-radio {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 150, 150, 0.9);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+
+      #legend .radio-swatch {
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        background: #2a2a2a;
+        outline: 2px dashed rgba(255, 80, 80, 0.9);
+        outline-offset: -1px;
+      }
+
       /* 双击提示 */
       #hint {
         position: absolute;
@@ -241,12 +379,31 @@
     </div>
     <div id="hint">双击元素卡片查看详细介绍</div>
 
+    <!-- 图例：分类配色 + 放射性标记说明 -->
+    <div id="legend">
+      <div class="legend-title">分类图例</div>
+      <div class="legend-items">
+        <span class="legend-item" style="--c:#e04038">碱金属</span>
+        <span class="legend-item" style="--c:#e8821e">碱土金属</span>
+        <span class="legend-item" style="--c:#3a6fd8">过渡金属</span>
+        <span class="legend-item" style="--c:#2f9e63">主族金属</span>
+        <span class="legend-item" style="--c:#9cbf2e">类金属</span>
+        <span class="legend-item" style="--c:#18b8c9">非金属</span>
+        <span class="legend-item" style="--c:#d9b324">卤素</span>
+        <span class="legend-item" style="--c:#a678e8">稀有气体</span>
+        <span class="legend-item" style="--c:#e8579f">镧系</span>
+        <span class="legend-item" style="--c:#54258c">锕系</span>
+      </div>
+      <div class="legend-radio"><span class="radio-swatch"></span>放射性元素（红色角标 + 虚线描边）</div>
+    </div>
+
     <!-- 元素详情面板：内容由 JS 填充 -->
     <div id="detail" role="dialog" aria-modal="true" aria-labelledby="d-zh">
       <div class="detail-card">
         <div class="d-head">
           <div class="d-symbol"></div>
           <div class="d-title">
+            <div class="d-pinyin"></div>
             <div class="d-zh" id="d-zh"></div>
             <div class="d-name"></div>
           </div>
@@ -257,6 +414,7 @@
           <div><span class="label">族</span><span class="v-group"></span></div>
           <div><span class="label">周期</span><span class="v-period"></span></div>
           <div><span class="label">元素分类</span><span class="v-cat"></span></div>
+          <div><span class="label">常温状态</span><span class="v-state"></span></div>
           <div><span class="label">所在区</span><span class="v-block"></span></div>
         </div>
         <div class="d-desc"></div>
