@@ -84,7 +84,7 @@
     },
   };
 
-  /* ===== 心形种子（可点击的“Come on, baby”，含缩小、下落逻辑） ===== */
+  /* ===== 心形种子（可点击的“点我发芽”，含缩小、下落逻辑） ===== */
   var Seed = function (tree, point, scale, color) {
     this.tree = tree;
 
@@ -176,7 +176,7 @@
       var point = heart.point,
         color = heart.color,
         scale = heart.scale;
-      var text = "Come on, baby";
+      var text = "点我发芽";
       ctx.save();
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
@@ -198,7 +198,7 @@
       var ctx = this.tree.ctx,
         circle = this.circle;
       var point = circle.point;
-      // 心形 + "Come on, baby" 标签向右伸出较远（下划线末端约 +180px），
+      // 心形 + “点我发芽”标签向右伸出较远（下划线随文案自适应宽度），
       // 擦除区域要足够大，避免缩小/下落时残留半个字母和线尾
       var margin = 90;
       ctx.clearRect(point.x - margin, point.y - margin, 4 * margin, 4 * margin);
