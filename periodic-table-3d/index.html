@@ -133,6 +133,99 @@
       button:focus-visible {
         outline: 2px solid #ffffff;
       }
+
+      /* ===== 元素详情面板（双击卡片弹出） ===== */
+      #detail {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: none; /* JS 选中元素后显示 */
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+      }
+
+      #detail.open {
+        display: flex;
+      }
+
+      .detail-card {
+        width: min(420px, 86vw);
+        padding: 28px 30px 24px;
+        border-radius: 14px;
+        background: rgba(10, 30, 34, 0.92);
+        border: 1px solid rgba(127, 255, 255, 0.35);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.25);
+        color: #e8f7f7;
+        user-select: none;
+      }
+
+      .detail-card .d-head {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        border-bottom: 1px solid rgba(127, 255, 255, 0.25);
+        padding-bottom: 16px;
+        margin-bottom: 14px;
+      }
+
+      .detail-card .d-symbol {
+        font-size: 52px;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 0 12px rgba(0, 255, 255, 0.9);
+        line-height: 1;
+      }
+
+      .detail-card .d-title .d-zh {
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      .detail-card .d-title .d-name {
+        margin-top: 2px;
+        font-size: 13px;
+        color: rgba(127, 255, 255, 0.75);
+      }
+
+      .detail-card .d-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 18px;
+        font-size: 13px;
+        line-height: 1.7;
+        margin-bottom: 14px;
+      }
+
+      .detail-card .d-meta .label {
+        color: rgba(127, 255, 255, 0.6);
+        margin-right: 6px;
+      }
+
+      .detail-card .d-desc {
+        font-size: 14px;
+        line-height: 1.9;
+        color: rgba(232, 247, 247, 0.9);
+      }
+
+      .detail-card .d-close {
+        margin-top: 18px;
+        width: 100%;
+      }
+
+      /* 双击提示 */
+      #hint {
+        position: absolute;
+        bottom: 64px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 12px;
+        z-index: 1;
+        pointer-events: none;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
     </style>
   </head>
   <body>
@@ -145,6 +238,30 @@
     <div id="info">
       <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> 3D 渲染 ·
       元素周期表（左键拖拽旋转 · 滚轮缩放 · 右键拖拽平移，若装有鼠标手势插件可能拦截右键）
+    </div>
+    <div id="hint">双击元素卡片查看详细介绍</div>
+
+    <!-- 元素详情面板：内容由 JS 填充 -->
+    <div id="detail" role="dialog" aria-modal="true" aria-labelledby="d-zh">
+      <div class="detail-card">
+        <div class="d-head">
+          <div class="d-symbol"></div>
+          <div class="d-title">
+            <div class="d-zh" id="d-zh"></div>
+            <div class="d-name"></div>
+          </div>
+        </div>
+        <div class="d-meta">
+          <div><span class="label">原子序数</span><span class="v-number"></span></div>
+          <div><span class="label">相对原子质量</span><span class="v-mass"></span></div>
+          <div><span class="label">族</span><span class="v-group"></span></div>
+          <div><span class="label">周期</span><span class="v-period"></span></div>
+          <div><span class="label">元素分类</span><span class="v-cat"></span></div>
+          <div><span class="label">所在区</span><span class="v-block"></span></div>
+        </div>
+        <div class="d-desc"></div>
+        <button type="button" class="d-close" title="关闭详情（也可按 Esc 或点击遮罩）">关闭</button>
+      </div>
     </div>
     <div id="menu">
       <button type="button" data-mode="table" title="切换为标准周期表排列">表格排列</button>

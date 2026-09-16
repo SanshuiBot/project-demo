@@ -134,6 +134,128 @@
   { sym: "Og", name: "Oganesson", zh: "鿫", mass: "(294)", group: 18, period: 7 },
 ];
 
+  /* ---------------- 元素扩展信息（原子序数顺序：分类 / 一句话简介） ---------------- */
+  var ELEMENT_EXTRAS = [
+    { cat: "非金属", desc: "宇宙中丰度最高的元素，水的组成成分。" },
+    { cat: "稀有气体", desc: "最轻的稀有气体，用于填充飞艇与低温冷却。" },
+    { cat: "碱金属", desc: "最轻的金属，锂电池的核心材料。" },
+    { cat: "碱土金属", desc: "轻而坚硬的金属，铍铜合金用于航天器材。" },
+    { cat: "类金属", desc: "硼砂与硼酸的主要元素，玻璃与洗涤剂原料。" },
+    { cat: "非金属", desc: "生命骨架元素，存在于一切有机物中。" },
+    { cat: "非金属", desc: "占大气 78%，是蛋白质与氨基酸的组成元素。" },
+    { cat: "非金属", desc: "生命必需元素，呼吸作用与燃烧都离不开它。" },
+    { cat: "卤素", desc: "最活泼的非金属，牙膏中的氟化物可防龋齿。" },
+    { cat: "稀有气体", desc: "通电发出橙红光，霓虹灯的经典发光气体。" },
+    { cat: "碱金属", desc: "质地软如蜡，食盐（氯化钠）的主要成分。" },
+    { cat: "碱土金属", desc: "轻质金属，燃烧发出耀眼白光，用于照明弹。" },
+    { cat: "主族金属", desc: "轻而耐用，铝箔、易拉罐与航空航天材料。" },
+    { cat: "类金属", desc: "芯片与光纤的核心材料，信息时代的基石。" },
+    { cat: "非金属", desc: "磷肥与 DNA 的组成元素，白磷在空气中自燃。" },
+    { cat: "非金属", desc: "橡胶硫化的关键元素，也是硫酸的原料。" },
+    { cat: "卤素", desc: "黄绿色有毒气体，用于自来水消毒。" },
+    { cat: "稀有气体", desc: "极不活泼，用于保护焊接与白炽灯填充。" },
+    { cat: "碱金属", desc: "密度比水还小，燃烧发出紫色火焰。" },
+    { cat: "碱土金属", desc: "骨骼与牙齿的主要成分，石灰石的主要元素。" },
+    { cat: "过渡金属", desc: "轻质耐热金属，用于自行车架与人工关节。" },
+    { cat: "过渡金属", desc: "强度高且耐腐蚀，钛合金广泛用于航空领域。" },
+    { cat: "过渡金属", desc: "硬度极高，钒钢用于工具与弹簧制造。" },
+    { cat: "过渡金属", desc: "不锈钢的必需成分，化合物呈现斑斓色彩。" },
+    { cat: "过渡金属", desc: "地壳中丰度较高的过渡金属，高锰酸钾呈紫色。" },
+    { cat: "过渡金属", desc: "地壳中最丰富的金属，血红蛋白的核心元素。" },
+    { cat: "过渡金属", desc: "蓝色玻璃的呈色元素，维生素 B12 的核心金属。" },
+    { cat: "过渡金属", desc: "耐腐蚀，古代中国的白铜即含镍。" },
+    { cat: "过渡金属", desc: "优良导体，电线与电路的主要材料。" },
+    { cat: "过渡金属", desc: "人体必需微量元素，镀锌钢板防锈的关键。" },
+    { cat: "主族金属", desc: "熔点极低的软金属，砷化镓用于半导体。" },
+    { cat: "类金属", desc: "与二氧化硅同源的元素，高纯锗用于红外光学。" },
+    { cat: "类金属", desc: "有剧毒的类金属，古代砒霜的主要成分。" },
+    { cat: "非金属", desc: "导电性随光照变化，硒鼓复印机的核心。" },
+    { cat: "卤素", desc: "常温下唯一的液态非金属，用于阻燃剂。" },
+    { cat: "稀有气体", desc: "通电发出明亮白光，曾用于高速摄影闪光灯。" },
+    { cat: "碱金属", desc: "极活泼的碱金属，铷原子钟用于卫星导航。" },
+    { cat: "碱土金属", desc: "燃烧发出鲜红色火焰，用于烟花与信号弹。" },
+    { cat: "过渡金属", desc: "钇铝石榴石用于激光器，高温超导研究材料。" },
+    { cat: "过渡金属", desc: "耐腐蚀的银白金属，锆合金用于核燃料包壳。" },
+    { cat: "过渡金属", desc: "超导材料的著名成分，铌钛合金用于核磁共振。" },
+    { cat: "过渡金属", desc: "熔点极高的金属，钼丝可用于高温电炉。" },
+    { cat: "过渡金属", desc: "首个由人工合成的元素，用于医学示踪。" },
+    { cat: "过渡金属", desc: "耐腐蚀的铂族金属，铱钌合金用于钢笔尖。" },
+    { cat: "过渡金属", desc: "反射率极高的铂族金属，用于车灯镀层。" },
+    { cat: "过渡金属", desc: "钯金可用于催化汽车尾气净化。" },
+    { cat: "过渡金属", desc: "导电性最佳的金属，胶片感光材料的核心。" },
+    { cat: "过渡金属", desc: "镉黄颜料与镍镉电池的成分，毒性较强。" },
+    { cat: "主族金属", desc: "铟锡氧化物是触摸屏透明电极的材料。" },
+    { cat: "主族金属", desc: "青铜的主要成分，锡焊料广泛用于电子工业。" },
+    { cat: "类金属", desc: "锑化物用于阻燃剂，古代用作化妆品原料。" },
+    { cat: "类金属", desc: "玻璃制造的关键添加剂，碲化镉用于太阳能电池。" },
+    { cat: "卤素", desc: "紫黑色固体，升华成紫色蒸气，碘酒可消毒。" },
+    { cat: "稀有气体", desc: "氙灯亮度极高，也用作麻醉剂。" },
+    { cat: "碱金属", desc: "熔点仅 28 度，空气中自燃，最活泼的金属之一。" },
+    { cat: "碱土金属", desc: "硫酸钡可用于胃肠 X 光造影。" },
+    { cat: "镧系元素", desc: "镧系之首，混合镧系金属用于打火石。" },
+    { cat: "镧系元素", desc: "打火石与特种玻璃的成分，氧化铈可抛光玻璃。" },
+    { cat: "镧系元素", desc: "磁性与光学性能独特，用于特种有色玻璃。" },
+    { cat: "镧系元素", desc: "钕铁硼是最强永磁体，广泛用于电机与硬盘。" },
+    { cat: "镧系元素", desc: "放射性元素，用于核电池与示踪研究。" },
+    { cat: "镧系元素", desc: "激光器的关键元素，钐钴磁体耐高温。" },
+    { cat: "镧系元素", desc: "红色荧光粉与节能灯的成分。" },
+    { cat: "镧系元素", desc: "磁制冷与核反应堆控制棒材料。" },
+    { cat: "镧系元素", desc: "绿色荧光粉的激活剂，铽铁磁致伸缩材料。" },
+    { cat: "镧系元素", desc: "镝灯亮度高，用于电影放映与舞台照明。" },
+    { cat: "镧系元素", desc: "最强的磁性元素之一，用于磁光存储。" },
+    { cat: "镧系元素", desc: "激光常用元素，铒光纤放大器支撑光纤通信。" },
+    { cat: "镧系元素", desc: "镱原子钟是目前最精准的时钟之一。" },
+    { cat: "镧系元素", desc: "激光常用元素，铥激光器用于微创手术。" },
+    { cat: "镧系元素", desc: "激光与 X 光管材料，镱箔用于测厚仪。" },
+    { cat: "镧系元素", desc: "镥 scandium 铝酸盐闪烁体用于医学成像。" },
+    { cat: "过渡金属", desc: "熔点最高的金属之一，铪锆比用于核工业。" },
+    { cat: "过渡金属", desc: "电容器的重要材料，碳化钽极硬且耐磨。" },
+    { cat: "过渡金属", desc: "熔点最高的金属，白炽灯丝曾是它的天下。" },
+    { cat: "过渡金属", desc: "铼是熔点第二高的金属，用于航空发动机叶片。" },
+    { cat: "过渡金属", desc: "密度第二大的金属，锇铱合金用于笔尖。" },
+    { cat: "过渡金属", desc: "耐腐蚀性极强，标准质量的原器由它制成。" },
+    { cat: "过渡金属", desc: "化学性质稳定，首饰与催化工业的核心材料。" },
+    { cat: "过渡金属", desc: "液态金属，温度计与荧光灯曾是它的应用。" },
+    { cat: "主族金属", desc: "铊盐剧毒，曾用于灭鼠，现用于红外探测。" },
+    { cat: "主族金属", desc: "铅酸电池的主要材料，密度大且柔软。" },
+    { cat: "主族金属", desc: "铋晶体呈现彩虹色泽，用于胃药与低熔点合金。" },
+    { cat: "主族金属", desc: "放射性金属，钋毒性强，曾引发历史悬案。" },
+    { cat: "卤素", desc: "天然元素中最稀有的之一，至今无实用价值。" },
+    { cat: "稀有气体", desc: "天然放射性稀有气体，地下室需防范氡气。" },
+    { cat: "碱金属", desc: "半衰期极短，天然存在量几乎为零。" },
+    { cat: "碱土金属", desc: "镭的放射性由居里夫妇发现，曾用于夜光涂料。" },
+    { cat: "锕系元素", desc: "锕系之首，天然存在于铀矿中。" },
+    { cat: "锕系元素", desc: "钍基核电研究的燃料，氧化钍曾用于汽灯纱罩。" },
+    { cat: "锕系元素", desc: "首个锕系元素，镤的发现历经十余年。" },
+    { cat: "锕系元素", desc: "核燃料与核武器的核心元素，铀浓缩备受关注。" },
+    { cat: "锕系元素", desc: "首个完全人工合成的锕系元素。" },
+    { cat: "锕系元素", desc: "核武器与核电池的常用材料。" },
+    { cat: "锕系元素", desc: "烟雾探测器中的镅-241 电离室。" },
+    { cat: "锕系元素", desc: "主要用于科学研究，人工合成产量极低。" },
+    { cat: "锕系元素", desc: "以加州命名的元素，锎-252 是强中子源。" },
+    { cat: "锕系元素", desc: "以爱因斯坦命名，产量以原子数计。" },
+    { cat: "锕系元素", desc: "以费米命名，仅能在实验室微量合成。" },
+    { cat: "锕系元素", desc: "以门捷列夫命名，人工合成元素之一。" },
+    { cat: "锕系元素", desc: "以诺贝尔命名，半衰期较短。" },
+    { cat: "锕系元素", desc: "以回旋加速器发明者劳伦斯命名。" },
+    { cat: "锕系元素", desc: "锕系最后一位成员，化学性质研究极少。" },
+    { cat: "过渡金属", desc: "以卢瑟福命名，首个超铀元素。" },
+    { cat: "过渡金属", desc: "以杜布纳联合核子研究所命名。" },
+    { cat: "过渡金属", desc: "以西博格命名，这是首个以在世人物命名的元素。" },
+    { cat: "过渡金属", desc: "以玻尔命名，半衰期极短。" },
+    { cat: "过渡金属", desc: "以黑森州命名，人工合成量以原子数计。" },
+    { cat: "过渡金属", desc: "以迈特纳命名，与 LISA 探测器研究相关。" },
+    { cat: "过渡金属", desc: "以达姆施塔特命名，半衰期仅数秒。" },
+    { cat: "过渡金属", desc: "以伦琴命名，X 射线发现者的荣誉。" },
+    { cat: "过渡金属", desc: "以哥白尼命名，性质与汞相似。" },
+    { cat: "主族金属", desc: "以日本理化学研究所命名，首个亚洲命名的元素。" },
+    { cat: "主族金属", desc: "以俄罗斯杜布纳附近的莫斯科州命名。" },
+    { cat: "主族金属", desc: "以弗廖罗夫命名，可能是一种类金属。" },
+    { cat: "主族金属", desc: "以劳伦斯利弗莫尔实验室命名。" },
+    { cat: "主族金属", desc: "以田纳西州命名，卤素家族最重的成员。" },
+    { cat: "稀有气体", desc: "第 118 号元素，以奥加尼扬命名，仅合成数个原子。" },
+  ];
+
   var camera, scene, renderer, controls;
   var objects = [];
   var targets = { table: [], sphere: [], helix: [], grid: [] };
@@ -152,7 +274,7 @@
       var element = document.createElement("div");
       element.className = "element";
       element.style.backgroundColor = "rgba(0,127,127," + (Math.random() * 0.5 + 0.25) + ")";
-      element.title = el.zh + " · " + el.name; // 悬停提示中英文元素名
+      element.title = el.zh + " · " + el.name + "（双击查看详情）"; // 悬停提示中英文名 + 操作引导
 
       var number = document.createElement("div");
       number.className = "number";
@@ -210,7 +332,71 @@
 
     window.addEventListener("resize", onWindowResize);
 
+    setupDetailPanel();
+
     transform(targets.table, 5000); // 初始动画：聚拢为表格
+  }
+
+  /* ---------------- 元素详情面板（双击卡片弹出） ---------------- */
+  function setupDetailPanel() {
+    var panel = document.getElementById("detail");
+    if (!panel) return;
+
+    // 区块归属：按族/周期推导（镧系 57-71、锕系 89-103 单列 f 区）
+    function blockOf(num, el) {
+      if (num >= 57 && num <= 71) return "f 区（镧系）";
+      if (num >= 89 && num <= 103) return "f 区（锕系）";
+      if (el.group === 1 || el.group === 2) return "s 区";
+      if (el.group >= 13 && el.group <= 18) return "p 区";
+      return "d 区";
+    }
+
+    function show(index) {
+      var el = ELEMENTS[index];
+      var extra = ELEMENT_EXTRAS[index];
+      if (!el || !extra) return;
+
+      panel.querySelector(".d-symbol").textContent = el.sym;
+      panel.querySelector(".d-zh").textContent = el.zh;
+      panel.querySelector(".d-name").textContent = el.name;
+      panel.querySelector(".v-number").textContent = index + 1;
+      panel.querySelector(".v-mass").textContent = el.mass;
+      panel.querySelector(".v-group").textContent = el.group;
+      panel.querySelector(".v-period").textContent = el.period;
+      panel.querySelector(".v-cat").textContent = extra.cat;
+      panel.querySelector(".v-block").textContent = blockOf(index + 1, el);
+      panel.querySelector(".d-desc").textContent = extra.desc;
+
+      panel.classList.add("open");
+    }
+
+    function hide() {
+      panel.classList.remove("open");
+    }
+
+    // 双击元素卡片打开详情（事件委托，卡片在 3D 变换中动态跟踪）
+    renderer.domElement.addEventListener("dblclick", function (e) {
+      var target = e.target;
+      while (target && target !== renderer.domElement) {
+        if (target.classList && target.classList.contains("element")) {
+          var index = objects.findIndex(function (o) {
+            return o.element === target;
+          });
+          if (index !== -1) show(index);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
+
+    // 关闭交互：关闭按钮 / 点击遮罩 / Esc 键
+    panel.querySelector(".d-close").addEventListener("click", hide);
+    panel.addEventListener("click", function (e) {
+      if (e.target === panel) hide();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") hide();
+    });
   }
 
   /* 球面排列 */
