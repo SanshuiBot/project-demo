@@ -113,18 +113,14 @@ body {
   margin-right: 150px;
 }
 
-/* ===== 背景音乐开关（右下角悬浮） ===== */
-#sound {
+/* ===== 悬浮操作按钮：右下角音乐开关 + 左下角重新播放 ===== */
+/* 两个按钮共用同一套底座（定位/配色/阴影/动效），只各自覆盖位置与形状 */
+#sound,
+#replay {
   position: fixed;
-  right: 18px;
   bottom: 18px;
   z-index: 99;
-  width: 44px;
-  height: 44px;
-  font-size: 20px;
-  line-height: 1;
   border: none;
-  border-radius: 50%;
   background: rgba(35, 31, 32, 0.82);
   color: #fff;
   cursor: pointer;
@@ -134,16 +130,43 @@ body {
     transform 0.2s ease;
 }
 
-#sound:hover {
+#sound:hover,
+#replay:hover {
   background: rgba(190, 26, 37, 0.9);
   transform: scale(1.08);
 }
 
-#sound:active {
+#sound:active,
+#replay:active {
   transform: scale(0.96);
 }
 
-/* ===== 点击引导：霓虹流光描边（非全屏，点击穿透） ===== */
+/* 音乐开关：右下角圆形 */
+#sound {
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+/* 重新播放：左下角胶囊 */
+#replay {
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+
+/* ===== 点击引导：霓虹流光描边（非全屏，点击穿透，点中心形后消失） ===== */
 /* 画布 1100×680，心形种子绘制于 (530, 340)：霓虹环以心形为中心，文字悬于其下方 */
 .guide {
   position: absolute;

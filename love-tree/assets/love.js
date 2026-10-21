@@ -1,6 +1,6 @@
 ﻿/**
  * love.js —— Canvas 绘制引擎（纯原生，无第三方依赖）
- * 对外只暴露 window.Tree；动画时序编排与文案/时间配置见 main.js。
+ * 对外只暴露 window.Tree；动画时序编排与配置读取见 main.js / config.js。
  */
 (function (window) {
   "use strict";
@@ -85,11 +85,16 @@
   };
 
   /* ===== 心形种子（可点击的“点我发芽”，含缩小、下落逻辑） ===== */
-  var Seed = function (tree, point, scale, color) {
+  var Seed = function (tree, point, scale, color, hint, clearMargin, hoverRange) {
     this.tree = tree;
 
-    scale = scale || 1;
-    color = color || "#FF0000";
+    scale = scale > 0 ? scale : 1;
+    color = typeof color === "string" && color ? color : "#FF0000";
+    // 提示文字 / 擦除边距 / 热区范围均来自 config.js（main.js 透传），
+    // 这里再做一层兜底，保证单独使用 love.js 时也合法
+    this.hint = typeof hint === "string" ? hint : "点我发芽";
+    this.clearMargin = clearMargin > 0 ? clearMargin : 90;
+    this.hoverRange = hoverRange > 0 ? hoverRange : 260;
 
     this.heart = {
       point: point,
@@ -176,7 +181,7 @@
       var point = heart.point,
         color = heart.color,
         scale = heart.scale;
-      var text = "点我发芽";
+      var text = this.hint;
       ctx.save();
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
@@ -200,18 +205,25 @@
       var point = circle.point;
       // 心形 + “点我发芽”标签向右伸出较远（下划线随文案自适应宽度），
       // 擦除区域要足够大，避免缩小/下落时残留半个字母和线尾
-      var margin = 90;
+      var margin = this.clearMargin;
       ctx.clearRect(point.x - margin, point.y - margin, 4 * margin, 4 * margin);
     },
     hover: function (x, y) {
       // 先做包围盒粗筛，避免在 mousemove 高频下逐像素读取
       var point = this.circle.point;
-      if (x < point.x - 260 || x > point.x + 260 || y < point.y - 260 || y > point.y + 260) {
+      var range = this.hoverRange;
+      if (x < point.x - range || x > point.x + range || y < point.y - range || y > point.y + range) {
         return false;
       }
+      // 像素回读前把坐标钳制到画布内：极端情况下 getImageData 收到越界
+      // 坐标时部分浏览器会抛 IndexSizeError，钳制后只可能读到透明像素
       var ctx = this.tree.ctx;
-      var pixel = ctx.getImageData(x, y, 1, 1);
-      return pixel.data[3] === 255;
+      var cx = Math.max(0, Math.min(this.tree.width - 1, x));
+      var cy = Math.max(0, Math.min(this.tree.height - 1, y));
+      var pixel = ctx.getImageData(cx, cy, 1, 1);
+      // 不要求 alpha===255：心形被缩得很小或贴在画布边缘时，可见部分几乎全是
+      // 抗锯齿半透明像素，严格相等会点不中；任何非透明像素即视为命中
+      return pixel.data[3] > 0;
     },
   };
 
@@ -219,9 +231,10 @@
   var Footer = function (tree, width, height, speed) {
     this.tree = tree;
     this.point = new Point(tree.seed.heart.point.x, tree.height - height / 2);
-    this.width = width;
-    this.height = height;
-    this.speed = speed || 2;
+    this.width = width > 0 ? width : tree.width;
+    this.height = height > 0 ? height : 5;
+    // 速度必须 >0：0 或负值会让地面永远不生长（length 不增甚至倒退）
+    this.speed = speed > 0 ? speed : 2;
     this.length = 0;
   };
   Footer.prototype = {
@@ -231,7 +244,7 @@
       var len = this.length / 2;
 
       ctx.save();
-      ctx.strokeStyle = "rgb(35, 31, 32)";
+      ctx.strokeStyle = this.tree.ink || "rgb(35, 31, 32)";
       ctx.lineWidth = this.height;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
@@ -260,6 +273,32 @@
 
     this.record = {};
 
+    // 整树平移参数（move 动画用）
+    var mv = this.opt.move || {};
+    this.moveSpeed = mv.speed > 0 ? mv.speed : 10;
+    // 衰减系数必须落在 (0,1)，否则速度不衰减或反向
+    this.moveFriction = mv.friction > 0 && mv.friction < 1 ? mv.friction : 0.95;
+    this.moveMinSpeed = mv.minSpeed > 0 ? mv.minSpeed : 2;
+
+    // 花瓣飘落补充策略
+    var pf = this.opt.petalFall || {};
+    this.petalKeepAlive = pf.keepAlive >= 0 ? Math.floor(pf.keepAlive) : 3;
+    var rMin = Math.floor(pf.recycle && pf.recycle.min > 0 ? pf.recycle.min : 1);
+    var rMax = Math.floor(pf.recycle && pf.recycle.max > 0 ? pf.recycle.max : 2);
+    if (rMin > rMax) {
+      var tmp = rMin;
+      rMin = rMax;
+      rMax = tmp;
+    }
+    this.petalRecycle = { min: rMin, max: rMax };
+
+    // 花瓣心形半径与采样尝试上限
+    this.heartRadius = this.opt.heartRadius > 0 ? this.opt.heartRadius : 240;
+    this.bloomTries = this.opt.bloom && this.opt.bloom.tries > 0 ? this.opt.bloom.tries : 800;
+
+    // 通用墨色（树枝 / 地面）
+    this.ink = typeof this.opt.inkColor === "string" && this.opt.inkColor ? this.opt.inkColor : "rgb(35, 31, 32)";
+
     this.initSeed();
     this.initFooter();
     this.initBranch();
@@ -268,25 +307,35 @@
   Tree.prototype = {
     initSeed: function () {
       var seed = this.opt.seed || {};
-      var x = seed.x || this.width / 2;
-      var y = seed.y || this.height / 2;
+      // 配置已由 config.js 清洗，这里对“单独使用 love.js”的场景再兜底：
+      // 坐标必须落在画布内且为有限数，否则种子会画到 NaN 位置（静默消失）
+      var x = isFinite(seed.x) ? Math.max(0, Math.min(this.width, seed.x)) : this.width / 2;
+      var y = isFinite(seed.y) ? Math.max(0, Math.min(this.height, seed.y)) : this.height / 2;
       var point = new Point(x, y);
-      var color = seed.color || "#FF0000";
-      var scale = seed.scale || 1;
+      var color = typeof seed.color === "string" && seed.color ? seed.color : "#FF0000";
+      var scale = seed.scale > 0 ? seed.scale : 1;
 
-      this.seed = new Seed(this, point, scale, color);
+      this.seed = new Seed(
+        this,
+        point,
+        scale,
+        color,
+        this.opt.seedHint,
+        this.opt.seedClearMargin,
+        this.opt.hoverRange
+      );
     },
 
     initFooter: function () {
       var footer = this.opt.footer || {};
-      var width = footer.width || this.width;
-      var height = footer.height || 5;
-      var speed = footer.speed || 2;
+      var width = footer.width > 0 ? footer.width : this.width;
+      var height = footer.height > 0 ? footer.height : 5;
+      var speed = footer.speed > 0 ? footer.speed : 2;
       this.footer = new Footer(this, width, height, speed);
     },
 
     initBranch: function () {
-      var branchs = this.opt.branch || [];
+      var branchs = Array.isArray(this.opt.branch) ? this.opt.branch : [];
       this.branchs = [];
       this.addBranchs(branchs);
     },
@@ -294,11 +343,11 @@
     initBloom: function () {
       var bloom = this.opt.bloom || {};
       var cache = [],
-        num = bloom.num || 500,
-        width = bloom.width || this.width,
-        height = bloom.height || this.height,
+        num = bloom.num >= 0 ? Math.floor(bloom.num) : 500,
+        width = bloom.width > 0 ? bloom.width : this.width,
+        height = bloom.height > 0 ? bloom.height : this.height,
         figure = this.seed.heart.figure;
-      var r = 240;
+      var r = this.heartRadius;
       for (var i = 0; i < num; i++) {
         cache.push(this.createBloom(width, height, r, figure));
       }
@@ -397,14 +446,27 @@
       place,
       speed
     ) {
-      var x, y;
-      while (true) {
+      var x, y, tries = 0;
+      // 采样上限：分布区域过小或心形半径过大时 inheart 命中率极低，
+      // 旧版 while(true) 会死循环卡死页面；超限后退化到区域中心，保证返回花瓣
+      while (tries++ < this.bloomTries) {
         x = random(20, width - 20);
         y = random(20, height - 20);
         if (inheart(x - width / 2, height - (height - 40) / 2 - y, radius)) {
           return new Bloom(this, new Point(x, y), figure, color, alpha, angle, scale, place, speed);
         }
       }
+      return new Bloom(
+        this,
+        new Point(width / 2, height / 2),
+        figure,
+        color,
+        alpha,
+        angle,
+        scale,
+        place,
+        speed
+      );
     },
 
     canFlower: function () {
@@ -437,9 +499,11 @@
       var s = this,
         ctx = s.ctx;
       var rec = s.record[k || "move"];
+      // 防御：未先调用 snapshot 就 move 时直接结束平移（返回 false 让调用方跳出循环）
+      if (!rec) return false;
       var point = rec.point,
         image = rec.image,
-        speed = rec.speed || 10,
+        speed = rec.speed || s.moveSpeed,
         width = rec.width,
         height = rec.height;
 
@@ -452,10 +516,10 @@
       ctx.restore();
 
       rec.point = new Point(i, j);
-      rec.speed = speed * 0.95;
+      rec.speed = speed * s.moveFriction;
 
-      if (rec.speed < 2) {
-        rec.speed = 2;
+      if (rec.speed < s.moveMinSpeed) {
+        rec.speed = s.moveMinSpeed;
       }
       return i < x || j < y;
     },
@@ -467,13 +531,14 @@
       for (var i = blooms.length - 1; i >= 0; i--) {
         blooms[i].jump();
       }
-      if (blooms.length < 3) {
+      if (blooms.length < s.petalKeepAlive) {
         var bloom = this.opt.bloom || {},
-          width = bloom.width || this.width,
-          height = bloom.height || this.height,
+          width = bloom.width > 0 ? bloom.width : this.width,
+          height = bloom.height > 0 ? bloom.height : this.height,
           figure = this.seed.heart.figure;
-        var r = 240;
-        for (var j = 0; j < random(1, 2); j++) {
+        var r = this.heartRadius;
+        var n = random(s.petalRecycle.min, s.petalRecycle.max);
+        for (var j = 0; j < n; j++) {
           blooms.push(
             this.createBloom(
               width / 2 + width,
@@ -499,8 +564,10 @@
     this.point1 = point1;
     this.point2 = point2;
     this.point3 = point3;
-    this.radius = radius;
-    this.length = length || 100;
+    // ctx.arc 半径必须 >0（负半径会抛 IndexSizeError）；长度至少 2，
+    // 否则生长参数 t=1/(length-1) 为 Infinity/负数，生长逻辑失去意义
+    this.radius = radius > 0 ? radius : 1;
+    this.length = length >= 2 ? length : 100;
     this.len = 0;
     this.t = 1 / (this.length - 1);
     this.branchs = branchs || [];
@@ -523,10 +590,11 @@
     draw: function (p) {
       var s = this;
       var ctx = s.tree.ctx;
+      var ink = s.tree.ink || "rgb(35, 31, 32)";
       ctx.save();
       ctx.beginPath();
-      ctx.fillStyle = "rgb(35, 31, 32)";
-      ctx.shadowColor = "rgb(35, 31, 32)";
+      ctx.fillStyle = ink;
+      ctx.shadowColor = ink;
       ctx.shadowBlur = 2;
       ctx.moveTo(p.x, p.y);
       ctx.arc(p.x, p.y, s.radius, 0, 2 * Math.PI);
@@ -541,9 +609,9 @@
     this.tree = tree;
     this.point = point;
     this.color = color || "rgb(255," + random(0, 255) + "," + random(0, 255) + ")";
-    this.alpha = alpha || random(0.3, 1);
+    this.alpha = alpha > 0 ? alpha : random(0.3, 1);
     this.angle = angle || random(0, 360);
-    this.scale = scale || 0.1;
+    this.scale = scale > 0 ? scale : 0.1;
     this.place = place;
     this.speed = speed;
 
@@ -583,7 +651,9 @@
       var s = this,
         height = s.tree.height;
 
-      if (s.point.x < -20 || s.point.y > height + 20) {
+      // 防御：飘落目标/速度缺失（理论上只有开花期缓存花瓣会这样），
+      // 或速度已衰减到 0（继续运动会产生 NaN 坐标且永不移除）→ 直接回收
+      if (!s.place || !(s.speed > 0) || s.point.x < -20 || s.point.y > height + 20) {
         s.tree.removeBloom(s);
       } else {
         s.draw();

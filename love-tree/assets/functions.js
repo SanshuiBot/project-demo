@@ -12,17 +12,29 @@
   var doc = document;
 
   /* ---------------- 打字机效果 ---------------- */
+  var typeTimer = null; // 当前打字机计时器（同一时刻只允许一个）
+
+  /* 停止打字：重新播放时由 main.js 调用，防止旧计时器与新一轮交替写同一节点 */
+  function stopTypewriter() {
+    if (typeTimer) {
+      clearInterval(typeTimer);
+      typeTimer = null;
+    }
+  }
+
   function typewriter(el) {
     if (!el) return;
+    stopTypewriter(); // 幂等：连续调用也只会有一个打字机在跑
     var str = el.innerHTML;
     var progress = 0;
 
     el.innerHTML = "";
-    var timer = setInterval(function () {
+    typeTimer = setInterval(function () {
       if (progress >= str.length) {
         // 结束前先写一次无光标的完整内容，避免奇数长度文案在尾部残留 "_"
         el.innerHTML = str;
-        clearInterval(timer);
+        clearInterval(typeTimer);
+        typeTimer = null;
         return;
       }
       var cur = str.charAt(progress);
@@ -118,6 +130,7 @@
   // 对外暴露
   window.Confession = {
     typewriter: typewriter,
+    stopTypewriter: stopTypewriter,
     timeElapse: timeElapse,
     fadeIn: fadeIn,
     fitStage: fitStage,

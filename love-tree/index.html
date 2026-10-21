@@ -17,6 +17,13 @@
     <button id="sound" type="button" title="播放 / 暂停背景音乐" aria-label="播放或暂停背景音乐">
       🎵
     </button>
+    <button id="replay" type="button" title="重新播放" aria-label="重新播放">↻ 重新播放</button>
+
+    <noscript>
+      <p style="margin: 40px auto; max-width: 640px; text-align: center; line-height: 2">
+        本页面的爱心树动画依赖 JavaScript。请在浏览器设置中启用 JavaScript 后刷新页面。
+      </p>
+    </noscript>
 
     <div id="main">
       <div id="error">
@@ -26,18 +33,11 @@
       <div id="wrap">
         <div id="text">
           <div id="code">
-            <!-- 修改下面的文字即可，把 ××× 换成 TA 的名字 -->
-            <span class="say">亲爱的×××，我爱你</span><br />
-            <span class="say">你对我来说</span><br />
-            <span class="say">就是早晨的面包</span><br />
-            <span class="say">晚上的香蕉</span><br />
-            <span class="say">山东人的大蒜</span><br />
-            <span class="say">四川人的辣椒</span><br />
-            <span class="say">每一天都想和你在一起</span><br />
-            <span class="say"><span class="space"></span>—— 爱你的×××</span>
+            <!-- 情书由 assets/config.js 注入：称呼「亲爱的×××」取自 to，署名「爱你的×××」取自 from，正文取自 text -->
           </div>
         </div>
         <div id="clock-box">
+          <!-- 以下两行引导语为页面内置文案（不属于 config.js 的可配置项） -->
           <span class="muted">亲爱的小宝宝，我喜欢你</span>
           <span class="muted">已经是……</span>
           <div id="clock"></div>
@@ -55,6 +55,7 @@
       </div>
     </div>
 
+    <script src="assets/config.js"></script>
     <script src="assets/functions.js"></script>
     <script src="assets/love.js"></script>
     <script src="assets/main.js"></script>
